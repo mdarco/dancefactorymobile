@@ -1,8 +1,7 @@
 {
-  "name": "ionic-sidemenu",
+  "name": "df-mobile",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "author": "Darko Milutinovic <dmilutinovic@gmail.com>",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -54,5 +53,5 @@
     "tslint": "~5.12.0",
     "typescript": "~3.1.6"
   },
-  "description": "An Ionic project"
+  "description": "Dance Factory mobile app"
 }
