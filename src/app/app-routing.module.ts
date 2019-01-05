@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { UserAuthenticatedGuardService } from './services/auth-guards/authenticated/user-authenticated-guard.service';
-import { LoginPage } from './login/login.page';
 
 const routes: Routes = [
   {
@@ -37,9 +36,6 @@ const routes: Routes = [
     CommonModule,
     FormsModule
   ],
-  exports: [RouterModule],
-  declarations: [
-    LoginPage
-  ]
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}
