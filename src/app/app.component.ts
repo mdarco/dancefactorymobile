@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Platform } from '@ionic/angular';
+import { Platform, MenuController } from '@ionic/angular';
 
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -14,12 +14,12 @@ import { AuthService } from './services/auth/auth.service';
 export class AppComponent {
   public appPages = [
     {
-      title: 'Home',
+      title: 'Početna',
       url: '/home',
       icon: 'home'
     },
     {
-      title: 'List',
+      title: 'Plesači',
       url: '/list',
       icon: 'list'
     }
@@ -30,6 +30,7 @@ export class AppComponent {
     private router: Router,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
+    private menuController: MenuController,
     private authService: AuthService
   ) {
     this.initializeApp();
@@ -56,5 +57,10 @@ export class AppComponent {
         this.authService.checkToken();
       });
     });
+  }
+
+  logout() {
+    this.authService.logout();
+    this.menuController.close();
   }
 }
