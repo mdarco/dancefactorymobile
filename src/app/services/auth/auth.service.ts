@@ -68,6 +68,10 @@ export class AuthService {
       this.authenticationState.next(false);
     });
   }
+
+  setAuthState(newState) {
+    this.authenticationState.next(newState);
+  }
  
   isAuthenticated() {
     return this.authenticationState.value;
