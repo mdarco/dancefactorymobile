@@ -13,7 +13,7 @@ export class LoginPage implements OnInit, OnDestroy {
   private username: string;
   private password: string;
 
-  private loginSubscription: any;
+  private login$: any;
 
   constructor(private authService: AuthService, private loadingController: LoadingController) { }
 
@@ -27,7 +27,7 @@ export class LoginPage implements OnInit, OnDestroy {
 
     await loading.present();
 
-    this.loginSubscription = this.authService.login({
+    this.login$ = this.authService.login({
       Username: this.username,
       Password: btoa(this.password)
     }).subscribe(result => {}, error => {}, () => {
@@ -38,7 +38,7 @@ export class LoginPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.loginSubscription.unsubscribe();
+    this.login$.unsubscribe();
   }
 
 }
