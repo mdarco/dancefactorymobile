@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 
 import { AuthService } from '../services/auth/auth.service';
@@ -13,10 +13,11 @@ export class LoginPage implements OnInit {
   private username: string;
   private password: string;
 
+  private loginSubscription: any;
+
   constructor(private authService: AuthService, private loadingController: LoadingController) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   async login() {
     const loading = await this.loadingController.create({
@@ -26,12 +27,18 @@ export class LoginPage implements OnInit {
 
     await loading.present();
 
-    this.authService.login({
+    this.loginSubscription = this.authService.login({
       Username: this.username,
       Password: btoa(this.password)
     }).subscribe(result => {}, error => {}, () => {
+      this.username = undefined;
+      this.password = undefined;
       loading.dismiss();
     });
+  }
+
+  ngOnDestroy() {
+    this.loginSubscription.unsubscribe();
   }
 
 }
