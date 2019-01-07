@@ -8,7 +8,7 @@ import { AuthService } from '../services/auth/auth.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
 
   private username: string;
   private password: string;
