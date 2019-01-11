@@ -16,14 +16,14 @@ const TOKEN_KEY = 'df_access_token';
   providedIn: 'root'
 })
 export class AuthService {
- 
+
   private apiUrl = environment.apiUrl;
   private userModel = null;
-  
+
   authenticationState = new BehaviorSubject(false);
- 
+
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private jwtHelper: JwtHelperService,
     private storage: Storage,
     private alertController: AlertController
@@ -32,8 +32,8 @@ export class AuthService {
   checkToken() {
     this.storage.get(TOKEN_KEY).then(token => {
       if (token) {
-        let isExpired = this.jwtHelper.isTokenExpired(token);
- 
+        const isExpired = this.jwtHelper.isTokenExpired(token);
+
         if (!isExpired) {
           // this.authenticationState.next(true);
         } else {
@@ -47,7 +47,7 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/api/login`, credentials)
       .pipe(
         tap(response => {
-          //console.log('Login response', response);
+          // console.log('Login response', response);
           if (response['IsAuthenticated']) {
             this.storage.set(TOKEN_KEY, response['Token']);
             this.userModel = response;
@@ -69,21 +69,21 @@ export class AuthService {
     });
   }
 
-  setAuthState(newState) {
+  setAuthState(newState: boolean) {
     this.authenticationState.next(newState);
   }
- 
+
   isAuthenticated() {
     return this.authenticationState.value;
   }
 
-  showAlert(msg) {
-    let alert = this.alertController.create({
+  showAlert(msg: string) {
+    const alert = this.alertController.create({
       message: msg,
       header: 'Greška',
       buttons: ['OK']
     });
-    alert.then(alert => alert.present());
+    alert.then(a => a.present());
   }
 
 }

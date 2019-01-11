@@ -1,22 +1,14 @@
-<ion-grid>
-  <ion-row justify-content-center>
-		<ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
-			<div text-center>
-				<img src="/assets/df-logo.png" width="240" height="240" />
-			</div>
-			<div padding>
-				<ion-item>
-					<ion-input type="text" [(ngModel)]="username" placeholder="Korisničko ime"></ion-input>
-				</ion-item>
-
-				<ion-item>
-					<ion-input type="password" [(ngModel)]="password" placeholder="Lozinka"></ion-input>
-				</ion-item>
-			</div>
-
-			<div padding>
-				<ion-button size="large" expand="block" (click)="login()">Prijava</ion-button>
-			</div>
+<ion-grid style="height: 100%">
+	<ion-row justify-content-center align-items-center style="height: 100%">
+		<ion-col>
+			<img src="/assets/df-logo.png" />
+			<ion-item>
+				<ion-input type="text" [(ngModel)]="username" placeholder="Korisničko ime"></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-input type="password" [(ngModel)]="password" placeholder="Lozinka"></ion-input>
+			</ion-item>
+			<ion-button size="large" expand="block" (click)="login()" style="margin-top: 30px;">Prijava</ion-button>
 		</ion-col>
 	</ion-row>
 </ion-grid>
