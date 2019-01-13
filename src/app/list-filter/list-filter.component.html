@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">ODUSTANI</ion-button>
+    </ion-buttons>
+
+    <ion-title>Filter</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="applyFilter()" strong>OK</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="outer-content">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-input type="text" clearInput [(ngModel)]="modalData.FullName" placeholder="Ime i/ili prezime"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Status</ion-label>
+            <ion-select [(ngModel)]="modalData.Status" placeholder="Status" cancelText="Odustani">
+              <ion-select-option value="all">Svi</ion-select-option>
+              <ion-select-option value="active">Aktivni</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+  </ion-grid>
+</ion-content>

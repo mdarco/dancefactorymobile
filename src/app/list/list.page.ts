@@ -3,6 +3,8 @@ import { LoadingController, AlertController, ToastController, ModalController } 
 
 import { MembersService } from '../services/members/members.service';
 
+import { ListFilterComponent } from '../list-filter/list-filter.component';
+
 @Component({
   selector: 'app-list',
   templateUrl: 'list.page.html',
@@ -78,7 +80,18 @@ export class ListPage implements OnInit, OnDestroy {
   }
 
   async showFilterDialog() {
-    await this.showWipToast();
+    // await this.showWipToast();
+
+    const modal = await this.modalController.create({
+      component: ListFilterComponent
+      // componentProps: { excludedTracks: this.excludeTracks }
+    });
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+      this.showAlert('Filter closed..');
+    }
   }
 
   async showAddMemberDialog() {
