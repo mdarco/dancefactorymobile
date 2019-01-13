@@ -14,11 +14,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'home',
-    loadChildren: './home/home.module#HomePageModule',
-    canActivate: [UserAuthenticatedGuardService]
-  },
-  {
     path: 'list',
     loadChildren: './list/list.module#ListPageModule',
     canActivate: [UserAuthenticatedGuardService]

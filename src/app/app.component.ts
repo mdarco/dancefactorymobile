@@ -12,14 +12,9 @@ import { AuthService } from './services/auth/auth.service';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  private hideMenu = true;
+  hideMenu = true;
 
   public appPages = [
-    {
-      title: 'Početna',
-      url: '/home',
-      icon: 'home'
-    },
     {
       title: 'Plesači',
       url: '/list',
@@ -47,7 +42,7 @@ export class AppComponent {
       this.authService.authenticationState.subscribe(state => {
         this.hideMenu = !this.authService.isAuthenticated();
         if (state) {
-          this.router.navigate(['home']);
+          this.router.navigate(['list']);
         } else {
           this.router.navigate(['login']);
         }
