@@ -4,24 +4,32 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      List
+      Plesači
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="showFilterDialog()">
+        <ion-icon slot="icon-only" name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let item of items">
-      <ion-icon [name]="item.icon" slot="start"></ion-icon>
-      {{item.title}}
-      <div class="item-note" slot="end">
-        {{item.note}}
-      </div>
+  <ion-list #membersList>
+    <ion-list-header>
+      <ion-label [hidden]="members.length > 0">Lista je prazna.</ion-label>
+      <ion-label [hidden]="members.length === 0">Ukupno: {{ members.length }}</ion-label>
+    </ion-list-header>
+    <ion-item
+      *ngFor="let member of members"
+      [hidden]="members.length === 0"
+      routerLink="/members/{{member.MemberID}}"
+      style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;"
+      [style.border-left]="member.IsActive ? '2px solid green' : '2px solid red'"
+    >
+      <ion-label>
+        <h3>{{member.FullName}}</h3>
+      </ion-label>
     </ion-item>
   </ion-list>
-  <!--
-    <div *ngIf="selectedItem" padding>
-      You navigated here from <b>{{selectedItem.title }}</b>
-    </div>
-  -->
 </ion-content>
