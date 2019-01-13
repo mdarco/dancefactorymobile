@@ -18,7 +18,7 @@
   <ion-list #membersList>
     <ion-list-header>
       <ion-label [hidden]="members.length > 0">Lista je prazna.</ion-label>
-      <ion-label [hidden]="members.length === 0">Ukupno: {{ members.length }}</ion-label>
+      <ion-label [hidden]="members.length === 0">Ukupno: {{ membersTotal }} | Prikazano: {{ membersDisplayed }}</ion-label>
     </ion-list-header>
     <ion-item
       *ngFor="let member of members"
@@ -29,7 +29,20 @@
     >
       <ion-label>
         <h3>{{member.FullName}}</h3>
+        <p>GRUPA 1, GRUPA 2, GRUPA 3, ...</p>
       </ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-infinite-scroll threshold="10%" (ionInfinite)="onInfiniteScroll($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" #fab>
+    <ion-fab-button (click)="showAddMemberDialog()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

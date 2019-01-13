@@ -16,9 +16,8 @@ const TOKEN_KEY = 'df_access_token';
   providedIn: 'root'
 })
 export class AuthService {
-
-  private apiUrl = environment.apiUrl;
-  private userModel = null;
+  apiUrl = environment.apiUrl;
+  userModel = null;
 
   authenticationState = new BehaviorSubject(false);
 
@@ -85,5 +84,4 @@ export class AuthService {
     });
     alert.then(a => a.present());
   }
-
 }

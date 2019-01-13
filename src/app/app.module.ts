@@ -20,7 +20,7 @@ export function jwtOptionsFactory(storage) {
       return storage.get('df_access_token');
     },
 
-    whitelistedDomains: environment.apiUrl
+    whitelistedDomains: [environment.apiUrl]
   }
 }
 

@@ -9,13 +9,14 @@ import { AuthService } from '../services/auth/auth.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit, OnDestroy {
-
   private username: string;
   private password: string;
 
   private login$: any;
 
-  constructor(private authService: AuthService, private loadingController: LoadingController) { }
+  constructor(
+    private authService: AuthService,
+    private loadingController: LoadingController) { }
 
   ngOnInit() { }
 
@@ -40,5 +41,4 @@ export class LoginPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.login$.unsubscribe();
   }
-
 }
