@@ -2,8 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoadingController, AlertController, ToastController, ModalController } from '@ionic/angular';
 
 import { MembersService } from '../services/members/members.service';
+import { UtilService } from '../services/util/util.service';
 
 import { ListFilterComponent } from '../list-filter/list-filter.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list',
@@ -16,7 +18,9 @@ export class ListPage implements OnInit, OnDestroy {
   filter = {
     PageNo: 1,
     RecordsPerPage: 10,
-    ExcludeNonActive: false
+    ExcludeNonActive: false,
+    FullName: undefined,
+    DanceGroupID: undefined
   };
 
   members: Array<any> = [];
@@ -25,10 +29,12 @@ export class ListPage implements OnInit, OnDestroy {
   
   constructor(
     private membersService: MembersService,
+    private utilService: UtilService,
     private loadingController: LoadingController,
     private alertController: AlertController,
     private toastController: ToastController,
-    private modalController: ModalController) { }
+    private modalController: ModalController
+  ) { }
 
   ngOnInit() {
     this.applyFilter();
@@ -38,7 +44,7 @@ export class ListPage implements OnInit, OnDestroy {
     this.getMembers$.unsubscribe();
   }
 
-  async applyFilter() {
+  async applyFilter(noConcat = false) {
     const loading = await this.loadingController.create({
       spinner: 'circles',
       message: 'Molim Vas, sačekajte...'
@@ -50,10 +56,18 @@ export class ListPage implements OnInit, OnDestroy {
       response => {
         // console.log('RESPONSE', response);
         if (response && response['Data'] && response['Data'].length > 0) {
-          this.members = this.members.concat(response['Data']);
+          if (noConcat) {
+            this.members = response['Data'];
+          } else {
+            this.members = this.members.concat(response['Data']);
+          }
+          
           this.membersTotal = response['Total'];
           this.membersDisplayed = this.filter.PageNo * this.filter.RecordsPerPage;
-          // console.log('MEMBERS', this.members);
+          
+          if (this.membersTotal < this.membersDisplayed) {
+            this.membersDisplayed = this.membersTotal;
+          }
         }
       },
       error => {
@@ -69,19 +83,28 @@ export class ListPage implements OnInit, OnDestroy {
     );
   }
 
-  async onInfiniteScroll(event) {
-    this.filter.PageNo++;
-    await this.applyFilter();
-    event.target.complete();
+  resetFilter() {
+    this.filter = {
+      PageNo: 1,
+      RecordsPerPage: 10,
+      ExcludeNonActive: false,
+      FullName: undefined,
+      DanceGroupID: undefined
+    };
+    this.applyFilter();
+  }
 
+  async onInfiniteScroll(event) {
     if (this.membersDisplayed === this.membersTotal) {
       event.target.disabled = true;
+    } else {
+      this.filter.PageNo++;
+      await this.applyFilter();
+      event.target.complete();
     }
   }
 
   async showFilterDialog() {
-    // await this.showWipToast();
-
     const modal = await this.modalController.create({
       component: ListFilterComponent
       // componentProps: { excludedTracks: this.excludeTracks }
@@ -89,8 +112,23 @@ export class ListPage implements OnInit, OnDestroy {
     await modal.present();
 
     const { data } = await modal.onDidDismiss();
-    if (data) {
-      this.showAlert('Filter closed..');
+
+    if (data && data.filterData && !this.utilService.isObjectEmpty(data.filterData)) {
+      this.filter.PageNo = 1;
+
+      if (data.filterData.Status && data.filterData.Status === 'active') {
+        this.filter.ExcludeNonActive = true;
+      }
+
+      if (data.filterData.FullName && data.filterData.FullName !== '') {
+        this.filter.FullName = data.filterData.FullName;
+      }
+
+      if (data.filterData.DanceGroupID && data.filterData.DanceGroupID !== '') {
+        this.filter.DanceGroupID = data.filterData.DanceGroupID;
+      }
+
+      this.applyFilter(true);
     }
   }
 

@@ -39,13 +39,12 @@ export class ListFilterComponent implements OnInit, OnDestroy {
 
     this.danceGroups$ = this.danceGroupsService.getLookup().subscribe(
       response => {
-        console.log('DANCE GROUPS RESPONSE', response);
         if (response && response['length'] > 0) {
           this.danceGroups = response;
         }
       },
       error => {
-        console.log('DANCE GROUPS LOOKUP ERROR', error);
+        console.error('DANCE GROUPS LOOKUP ERROR', error);
         this.danceGroups = [];
         this.showToast('Došlo je do greške prilikom preuzimanja spiska plesnih grupa.', 'danger');
       },
