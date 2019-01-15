@@ -13,9 +13,17 @@ export class ListFilterComponent implements OnInit {
 
   ngOnInit() { }
 
+  removeStatusSelection() {
+    this.modalData['Status'] = undefined;
+  }
+
+  removeDanceGroupSelection() {
+    this.modalData['DanceGroupID'] = undefined;
+  }
+
   applyFilter() {
     this.modalController.dismiss({
-      success: true
+      filterData: this.modalData
     });
   }
 

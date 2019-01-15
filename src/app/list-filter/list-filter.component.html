@@ -12,25 +12,60 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="outer-content">
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-input type="text" clearInput [(ngModel)]="modalData.FullName" placeholder="Ime i/ili prezime"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-        <ion-col>
-          <ion-item>
-            <ion-label>Status</ion-label>
-            <ion-select [(ngModel)]="modalData.Status" placeholder="Status" cancelText="Odustani">
-              <ion-select-option value="all">Svi</ion-select-option>
-              <ion-select-option value="active">Aktivni</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-  </ion-grid>
+<ion-content>
+  <form>
+    <ion-item-divider color="light">
+      <ion-label>Ime i/ili prezime plesača</ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-input type="text" clearInput [(ngModel)]="modalData.FullName" name="fullname" placeholder=""></ion-input>
+    </ion-item>
+
+    <ion-item-divider color="light">
+      <ion-label>Status plesača</ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-label>Status</ion-label>
+      <ion-select [(ngModel)]="modalData.Status" name="status" placeholder="Izaberite status" cancelText="Odustani">
+        <ion-select-option value="all">Svi</ion-select-option>
+        <ion-select-option value="active">Aktivni</ion-select-option>
+      </ion-select>
+
+      <ion-button
+        style="z-index: 1000 !important;"
+        size="small"
+        fill="outline"
+        color="medium"
+        [hidden]="modalData.Status !== 'all' && modalData.Status !== 'active'"
+        (click)="removeStatusSelection()"
+      >
+          <ion-icon name='close'></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item-divider color="light">
+      <ion-label>Grupa</ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-label>Grupa</ion-label>
+      <ion-select [(ngModel)]="modalData.DanceGroupID" name="dancegroup" placeholder="Izaberite grupu" cancelText="Odustani">
+        <ion-select-option value="all">Svi</ion-select-option>
+        <ion-select-option value="active">Aktivni</ion-select-option>
+      </ion-select>
+
+      <ion-button
+        style="z-index: 1000 !important;"
+        size="small"
+        fill="outline"
+        color="medium"
+        [hidden]="modalData.DanceGroupID === undefined"
+        (click)="removeDanceGroupSelection()"
+      >
+          <ion-icon name='close'></ion-icon>
+      </ion-button>
+    </ion-item>
+  </form>
 </ion-content>
