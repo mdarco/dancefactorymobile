@@ -91,7 +91,7 @@ export class ListPage implements OnInit, OnDestroy {
       FullName: undefined,
       DanceGroupID: undefined
     };
-    this.applyFilter();
+    this.applyFilter(true);
   }
 
   async onInfiniteScroll(event) {
