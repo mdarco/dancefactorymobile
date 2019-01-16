@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { LoadingController, ToastController, ModalController } from '@ionic/angular';
 
 import { DanceGroupsService } from '../services/dance-groups/dance-groups.service';
@@ -9,6 +9,10 @@ import { DanceGroupsService } from '../services/dance-groups/dance-groups.servic
   styleUrls: ['./list-filter.component.scss']
 })
 export class ListFilterComponent implements OnInit, OnDestroy {
+  @Input() FullName: string;
+  @Input() ExcludeNonActive: boolean;
+  @Input() DanceGroupID: number;
+
   danceGroups: any = [];
   modalData = {};
 
@@ -41,6 +45,9 @@ export class ListFilterComponent implements OnInit, OnDestroy {
       response => {
         if (response && response['length'] > 0) {
           this.danceGroups = response;
+
+          // fill existing values
+          this.populateDialog();
         }
       },
       error => {
@@ -52,6 +59,22 @@ export class ListFilterComponent implements OnInit, OnDestroy {
         loading.dismiss();
       }
     );
+  }
+
+  populateDialog() {
+    if (this.FullName) {
+      this.modalData['FullName'] = this.FullName;
+    }
+
+    if (this.DanceGroupID) {
+      this.modalData['DanceGroupID'] = this.DanceGroupID;
+    }
+
+    if (this.ExcludeNonActive) {
+      this.modalData['Status'] = 'active';
+    } else {
+      this.modalData['Status'] = 'all';
+    }
   }
 
   removeStatusSelection() {

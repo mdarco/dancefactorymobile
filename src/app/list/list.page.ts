@@ -15,7 +15,7 @@ import { filter } from 'rxjs/operators';
 export class ListPage implements OnInit, OnDestroy {
   private getMembers$: any;
 
-  filter = {
+  filter: any = {
     PageNo: 1,
     RecordsPerPage: 10,
     ExcludeNonActive: false,
@@ -26,7 +26,7 @@ export class ListPage implements OnInit, OnDestroy {
   members: Array<any> = [];
   membersTotal?: number = null;
   membersDisplayed?: number = null;
-  
+
   constructor(
     private membersService: MembersService,
     private utilService: UtilService,
@@ -61,10 +61,10 @@ export class ListPage implements OnInit, OnDestroy {
           } else {
             this.members = this.members.concat(response['Data']);
           }
-          
+
           this.membersTotal = response['Total'];
           this.membersDisplayed = this.filter.PageNo * this.filter.RecordsPerPage;
-          
+
           if (this.membersTotal < this.membersDisplayed) {
             this.membersDisplayed = this.membersTotal;
           }
@@ -106,26 +106,46 @@ export class ListPage implements OnInit, OnDestroy {
 
   async showFilterDialog() {
     const modal = await this.modalController.create({
-      component: ListFilterComponent
-      // componentProps: { excludedTracks: this.excludeTracks }
+      component: ListFilterComponent,
+      componentProps: this.filter
     });
     await modal.present();
 
     const { data } = await modal.onDidDismiss();
 
-    if (data && data.filterData && !this.utilService.isObjectEmpty(data.filterData)) {
+    if (data && data.filterData) {
       this.filter.PageNo = 1;
 
-      if (data.filterData.Status && data.filterData.Status === 'active') {
-        this.filter.ExcludeNonActive = true;
+      if (data.filterData.Status) {
+        if (data.filterData.Status === 'active') {
+          this.filter.ExcludeNonActive = true;
+        }
+
+        if (data.filterData.Status === 'all') {
+          this.filter.ExcludeNonActive = false;
+        }
+      } else {
+        this.filter.ExcludeNonActive = false;
       }
 
-      if (data.filterData.FullName && data.filterData.FullName !== '') {
-        this.filter.FullName = data.filterData.FullName;
+      if (data.filterData.FullName) {
+        if (data.filterData.FullName !== '') {
+          this.filter.FullName = data.filterData.FullName;
+        } else {
+          this.filter.FullName = undefined;
+        }
+      } else {
+        this.filter.FullName = undefined;
       }
 
-      if (data.filterData.DanceGroupID && data.filterData.DanceGroupID !== '') {
-        this.filter.DanceGroupID = data.filterData.DanceGroupID;
+      if (data.filterData.DanceGroupID) {
+        if (data.filterData.DanceGroupID !== '') {
+          this.filter.DanceGroupID = data.filterData.DanceGroupID;
+        } else {
+          this.filter.DanceGroupID = undefined;
+        }
+      } else {
+        this.filter.DanceGroupID = undefined;
       }
 
       this.applyFilter(true);
