@@ -26,7 +26,8 @@
     <ion-item
       *ngFor="let member of members"
       [hidden]="members.length === 0"
-      routerLink="/members/{{member.MemberID}}"
+      routerLink="/list/{{member.MemberID}}"
+      routerDirection="forward"
       style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;"
       [style.border-left]="member.IsActive ? '2px solid green' : '2px solid red'"
     >

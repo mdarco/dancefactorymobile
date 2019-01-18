@@ -14,13 +14,18 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'login',
+    loadChildren: './login/login.module#LoginPageModule'
+  },
+  {
     path: 'list',
     loadChildren: './list/list.module#ListPageModule',
     canActivate: [UserAuthenticatedGuardService]
   },
-  { 
-    path: 'login',
-    loadChildren: './login/login.module#LoginPageModule' 
+  {
+    path: 'list/:id',
+    loadChildren: './member/member.module#MemberPageModule',
+    canActivate: [UserAuthenticatedGuardService]
   }
 ];
 
