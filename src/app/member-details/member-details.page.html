@@ -1,3 +1,34 @@
 <ion-content padding>
-  Member details
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>{{ memberDetails.DanceGroups }}</ion-card-subtitle>
+      <ion-card-title>{{ memberDetails.FullName }}</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Datum rođenja</ion-label>
+        <ion-note slot="end">{{ memberDetails.BirthDate | date:'dd.MM.yyyy' }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Mesto rođenja</ion-label>
+        <ion-note slot="end">{{ memberDetails.BirthPlace }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Uzrast</ion-label>
+        <ion-note slot="end">{{ memberDetails.AgeCategory }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Adresa</ion-label>
+        <ion-note slot="end">{{ memberDetails.ContactData.Address }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Telefoni</ion-label>
+        <ion-note slot="end">{{ memberDetails.ContactData.Phone1 }}<br>{{ memberDetails.ContactData.Phone2 }}<br>{{ memberDetails.ContactData.Phone3 }}</ion-note>
+      </ion-item>
+      <ion-item *ngIf="memberDetails.Note !== undefined && memberDetails.Note !== null && memberDetails.Note !== ''">
+        <ion-note><br>{{ memberDetails.Note }}</ion-note>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

@@ -12,6 +12,9 @@ export class MembersService {
   private memberDetails_header_memberNameSource = new BehaviorSubject<string>('');
   memberDetails_header_memberName$ = this.memberDetails_header_memberNameSource.asObservable();
 
+  private memberDetails_contentSource = new BehaviorSubject<Object>({});
+  memberDetails_content$ = this.memberDetails_contentSource.asObservable();
+
   apiUrl = environment.apiUrl;
   rootUrl: string = '/api/members';
 
@@ -25,5 +28,9 @@ export class MembersService {
 
   setMemberDetailsHeaderMemberName(name: string) {
     this.memberDetails_header_memberNameSource.next(name);
+  }
+
+  setMemberDetailsContent(memberDetails) {
+    this.memberDetails_contentSource.next(memberDetails);
   }
 }

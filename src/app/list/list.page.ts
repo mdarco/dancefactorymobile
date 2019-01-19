@@ -108,6 +108,10 @@ export class ListPage implements OnInit, OnDestroy {
     this.membersService.setMemberDetailsHeaderMemberName(name);
   }
 
+  setContentMemberDetails(memberDetails) {
+    this.membersService.setMemberDetailsContent(memberDetails);
+  }
+
   async showFilterDialog() {
     const modal = await this.modalController.create({
       component: ListFilterComponent,
