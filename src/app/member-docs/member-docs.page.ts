@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
 
 import { Subscription } from 'rxjs';
+import * as moment from 'moment';
 
 import { MembersService } from '../services/members/members.service';
 
@@ -61,8 +62,15 @@ export class MemberDocsPage implements OnInit {
     );
   }
 
-  resolveCardTitleColor() {
-    return 'danger';
+  resolveCardTitleColor(doc) {
+    if (doc.Metadata && doc.Metadata.ExpiryDate) {
+      var today = moment(Date.now());
+      var expiryDate = moment(doc.Metadata.ExpiryDate);
+
+      if (expiryDate < today) {
+          return 'danger';
+      }
+    }
   }
 
   async showToast(message) {

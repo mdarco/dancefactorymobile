@@ -2,7 +2,7 @@
   <ion-card *ngFor="let doc of memberDocs">
     <ion-card-header>
       <ion-card-subtitle>{{ doc.DocumentType }}</ion-card-subtitle>
-      <ion-card-title [color]="resolveCardTitleColor()">{{ doc.DocumentName }}</ion-card-title>
+      <ion-card-title [color]="resolveCardTitleColor(doc)">{{ doc.DocumentName }}</ion-card-title>
     </ion-card-header>
   
     <ion-card-content>
