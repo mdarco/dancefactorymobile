@@ -31,6 +31,11 @@ export class MembersService {
     return this.http.get(url);
   }
 
+  getMemberPayments(memberId) {
+    const url = this.apiUrl + this.rootUrl + '/' + memberId + '/payments?nd=' + Date.now();
+    return this.http.get(url);
+  }
+
   setMemberDetailsHeaderMemberName(name: string) {
     this.memberDetails_header_memberNameSource.next(name);
   }

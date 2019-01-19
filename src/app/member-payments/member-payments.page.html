@@ -1,9 +1,20 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>member-payments</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content padding>
-  Member payments
+  <ion-list>
+    <ion-list-header [hidden]="memberPayments?.length > 0">
+      <ion-label>Lista plaćanja je prazna.</ion-label>
+    </ion-list-header>
+    <ion-item
+      *ngFor="let p of memberPayments"
+      [hidden]="memberPayments.length === 0"
+      style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;"
+      [style.border-left]="resolveMemberPaymentStatusBorder(p)"
+      (click)="showInstallmentsDialog(payment)"
+    >
+      <ion-label>
+        <h3>{{ p.Payment.Name }}</h3>
+        <p>{{ p.Payment.Description }}</p>
+        <p>{{ p.Payment.Amount }} {{ p.Payment.Currency }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
