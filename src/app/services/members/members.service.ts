@@ -26,6 +26,11 @@ export class MembersService {
     return this.http.post(url, filter);
   }
 
+  getMemberDocuments(memberId) {
+    const url = this.apiUrl + this.rootUrl + '/' + memberId + '/documents?nd=' + Date.now();
+    return this.http.get(url);
+  }
+
   setMemberDetailsHeaderMemberName(name: string) {
     this.memberDetails_header_memberNameSource.next(name);
   }

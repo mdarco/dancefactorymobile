@@ -2,10 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoadingController, AlertController, ToastController, ModalController } from '@ionic/angular';
 
 import { MembersService } from '../services/members/members.service';
-import { UtilService } from '../services/util/util.service';
 
 import { ListFilterComponent } from '../list-filter/list-filter.component';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list',
@@ -29,7 +27,6 @@ export class ListPage implements OnInit, OnDestroy {
 
   constructor(
     private membersService: MembersService,
-    private utilService: UtilService,
     private loadingController: LoadingController,
     private alertController: AlertController,
     private toastController: ToastController,
