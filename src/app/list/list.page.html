@@ -30,6 +30,7 @@
       routerDirection="forward"
       style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;"
       [style.border-left]="member.IsActive ? '2px solid green' : '2px solid red'"
+      (click)="setHeaderMemberName(member.FullName)"
     >
       <ion-label>
         <h3>{{member.FullName}}</h3>
