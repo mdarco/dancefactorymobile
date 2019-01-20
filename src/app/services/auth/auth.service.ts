@@ -46,18 +46,17 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/api/login`, credentials)
       .pipe(
         tap(response => {
-          // console.log('Login response', response);
+          // console.log('Login service response', response);
           if (response['IsAuthenticated']) {
             this.storage.set(TOKEN_KEY, response['Token']);
             this.userModel = response;
             this.authenticationState.next(true);
           } else {
-            this.showAlert('Korisničko ime i/ili lozinka nisu ispravni.');
+            throw new Error('Korisničko ime i/ili lozinka nisu ispravni.');
           }
         }),
         catchError(e => {
-          this.showAlert('Korisničko ime i/ili lozinka nisu ispravni.');
-          throw new Error(e);
+          throw new Error('Korisničko ime i/ili lozinka nisu ispravni.');
         })
       );
   }

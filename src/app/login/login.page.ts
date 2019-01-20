@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, AlertController } from '@ionic/angular';
 
 import { AuthService } from '../services/auth/auth.service';
 
@@ -16,9 +16,15 @@ export class LoginPage implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private loadingController: LoadingController) { }
+    private loadingController: LoadingController,
+    private alertController: AlertController
+  ) { }
 
   ngOnInit() { }
+
+  ngOnDestroy() {
+    this.login$.unsubscribe();
+  }
 
   async login() {
     const loading = await this.loadingController.create({
@@ -31,14 +37,29 @@ export class LoginPage implements OnInit, OnDestroy {
     this.login$ = this.authService.login({
       Username: this.username,
       Password: btoa(this.password)
-    }).subscribe(result => {}, error => {}, () => {
-      this.username = undefined;
-      this.password = undefined;
-      loading.dismiss();
+    }).subscribe(
+      result => {},
+      error => {
+        // console.log('LOGIN ERROR', error);
+        loading.dismiss();
+        this.username = undefined;
+        this.password = undefined;
+        this.showAlert(error.message);
+      }, 
+      () => {
+        // console.log('LOGIN FINALLY');
+        loading.dismiss();
+        this.username = undefined;
+        this.password = undefined;
     });
   }
 
-  ngOnDestroy() {
-    this.login$.unsubscribe();
+  showAlert(msg: string) {
+    const alert = this.alertController.create({
+      message: msg,
+      header: 'Greška',
+      buttons: ['OK']
+    });
+    alert.then(a => a.present());
   }
 }
