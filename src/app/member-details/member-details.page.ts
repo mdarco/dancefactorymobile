@@ -9,13 +9,27 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./member-details.page.scss'],
 })
 export class MemberDetailsPage implements OnInit, OnDestroy {
-  memberDetails = {};
+  memberDetails = {
+    FullName: null,
+    BirthDate: null,
+    BirthPlace: null,
+    AgeCategory: null,
+    DanceGroups: null,
+    Note: null,
+    ContactData: {
+      Address: null,
+      Phone1: null,
+      Phone2: null,
+      Phone3: null
+    }
+  };
+
   memberDetails$: Subscription;
 
   constructor(private membersService: MembersService) { }
 
   ngOnInit() {
-    this.memberDetails$ = this.membersService.memberDetails_content$.subscribe(details => this.memberDetails = details);
+    this.memberDetails$ = this.membersService.memberDetails_content$.subscribe((details: any) => this.memberDetails = details);
   }
 
   ngOnDestroy() {

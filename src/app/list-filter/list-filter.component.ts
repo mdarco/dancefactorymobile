@@ -14,7 +14,12 @@ export class ListFilterComponent implements OnInit, OnDestroy {
   @Input() DanceGroupID: number;
 
   danceGroups: any = [];
-  modalData = {};
+  
+  modalData = {
+    FullName: null,
+    Status: null,
+    DanceGroupID: null
+  };
 
   private danceGroups$: any;
 

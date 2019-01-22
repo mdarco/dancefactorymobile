@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoadingController, AlertController } from '@ionic/angular';
 
 import { AuthService } from '../services/auth/auth.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -9,8 +10,8 @@ import { AuthService } from '../services/auth/auth.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit, OnDestroy {
-  private username: string;
-  private password: string;
+  username: string;
+  password: string;
 
   private login$: any;
 
@@ -41,6 +42,7 @@ export class LoginPage implements OnInit, OnDestroy {
       result => {},
       error => {
         // console.log('LOGIN ERROR', error);
+        console.log('DF API url:', environment.apiUrl);
         loading.dismiss();
         this.username = undefined;
         this.password = undefined;
