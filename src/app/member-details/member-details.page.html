@@ -2,7 +2,10 @@
   <ion-card>
     <ion-card-header>
       <ion-card-subtitle>{{ memberDetails.DanceGroups }}</ion-card-subtitle>
-      <ion-card-title>{{ memberDetails.FullName }}</ion-card-title>
+      <ion-card-title>
+        {{ memberDetails.FullName }}<br>
+        <ion-badge color="{{ !memberDetails.IsActive ? 'danger' : 'success' }}">{{ !memberDetails.IsActive ? 'Neaktivan' : 'Aktivan' }}</ion-badge>
+      </ion-card-title>
     </ion-card-header>
   
     <ion-card-content>

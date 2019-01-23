@@ -21,7 +21,7 @@ export function jwtOptionsFactory(storage) {
     },
 
     whitelistedDomains: [environment.apiUrl]
-  }
+  };
 }
 
 @NgModule({
