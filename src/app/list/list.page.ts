@@ -73,6 +73,7 @@ export class ListPage implements OnInit, OnDestroy {
         this.membersTotal = null;
         this.membersDisplayed = null;
         this.showAlert('Došlo je do greške prilikom preuzimanja liste plesača.');
+        loading.dismiss();
       },
       () => {
         loading.dismiss();

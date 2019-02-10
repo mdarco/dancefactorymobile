@@ -1,18 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, ToastController, ModalController } from '@ionic/angular';
 
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 
 import { MembersService } from '../services/members/members.service';
 
+import { InstallmentsComponent } from '../installments/installments.component';
+
 @Component({
   selector: 'app-member-payments',
   templateUrl: './member-payments.page.html',
   styleUrls: ['./member-payments.page.scss'],
 })
-export class MemberPaymentsPage implements OnInit {
+export class MemberPaymentsPage implements OnInit, OnDestroy {
+  memberId: number;
   memberDetails$: Subscription;
 
   getMemberPayments$: Subscription;
@@ -21,13 +24,14 @@ export class MemberPaymentsPage implements OnInit {
   constructor(
     private membersService: MembersService,
     private loadingController: LoadingController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
     this.memberDetails$ = this.membersService.memberDetails_content$.subscribe(details => {
-      const memberId = details['MemberID'];
-      this.getMemberPayments(memberId);
+      this.memberId = details['MemberID'];
+      this.getMemberPayments(this.memberId);
     });
   }
 
@@ -92,6 +96,19 @@ export class MemberPaymentsPage implements OnInit {
       }
     }
     return '';
+  }
+
+  async showInstallmentsDialog(payment) {
+    const modal = await this.modalController.create({
+      component: InstallmentsComponent,
+      componentProps: {
+        memberId: this.memberId,
+        paymentId: payment.ID
+      }
+    });
+    await modal.present();
+
+    // const { data } = await modal.onDidDismiss();
   }
 
   async showToast(message) {

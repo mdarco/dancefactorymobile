@@ -1,3 +1,28 @@
-<p>
-  installments works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Plaćanja</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">ZATVORI</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-list-header [hidden]="installments?.length > 0">
+      <ion-label>Lista je prazna.</ion-label>
+    </ion-list-header>
+    
+    <ion-item
+      *ngFor="let installment of installments"
+      [hidden]="installments.length === 0"
+      style="margin-top: 10px; margin-bottom: 10px;"
+    >
+      <ion-label>
+        <h3>Rok: {{ installment.InstallmentDate | date: 'dd.MM.yyyy' }}</h3>
+        <p>{{ installment.Amount }} RSD</p>
+        <ion-badge color="{{ getStatusColor(installment) }}" style=" font-variant: small-caps;">{{ installment.IsPaid ? 'plaćeno' : 'nije plaćeno' }}</ion-badge>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

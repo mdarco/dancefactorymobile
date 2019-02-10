@@ -8,7 +8,7 @@
       [hidden]="memberPayments.length === 0"
       style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;"
       [style.border-left]="resolveMemberPaymentStatusBorder(p)"
-      (click)="showInstallmentsDialog(payment)"
+      (click)="showInstallmentsDialog(p)"
     >
       <ion-label>
         <h3>{{ p.Payment.Name }}</h3>
