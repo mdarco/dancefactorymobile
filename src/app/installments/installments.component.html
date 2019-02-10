@@ -22,7 +22,9 @@
         <h3>Rok: {{ installment.InstallmentDate | date: 'dd.MM.yyyy' }}</h3>
         <p>{{ installment.Amount }} RSD</p>
         <ion-badge color="{{ getStatusColor(installment) }}" style=" font-variant: small-caps;">{{ installment.IsPaid ? 'plaćeno' : 'nije plaćeno' }}</ion-badge>
+        <ion-badge color="medium" style=" font-variant: small-caps;" *ngIf="installment.IsCanceled === true">Poništeno</ion-badge>
       </ion-label>
+      <ion-icon slot="end" name="more" (click)="openActionSheet(installment)"></ion-icon>
     </ion-item>
   </ion-list>
 </ion-content>

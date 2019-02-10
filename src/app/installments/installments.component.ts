@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { LoadingController, ToastController, ModalController } from '@ionic/angular';
+import { LoadingController, ToastController, ModalController, ActionSheetController } from '@ionic/angular';
 import * as moment from 'moment';
 
 import { MembersService } from '../services/members/members.service';
@@ -20,6 +20,7 @@ export class InstallmentsComponent implements OnInit, OnDestroy {
     private loadingController: LoadingController,
     private toastController: ToastController,
     private modalController: ModalController,
+    private actionSheetController: ActionSheetController,
     private membersService: MembersService
   ) { }
 
@@ -55,6 +56,29 @@ export class InstallmentsComponent implements OnInit, OnDestroy {
         loading.dismiss();
       }
     );
+  }
+
+  async openActionSheet(installment) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Plaćanja',
+      buttons: [{
+        text: 'Poništi',
+        handler: () => {
+          this.showToast('Plaćanje poništeno.', 'primary')
+        }
+      }, {
+        text: 'Izmeni status (plaćeno/neplaćeno)',
+        handler: () => {
+          this.showToast('Izmena statusa.', 'secondary')
+        }
+      }, {
+        text: 'Zatvori',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {}
+      }]
+    });
+    await actionSheet.present();
   }
 
   getStatusColor(installment) {
