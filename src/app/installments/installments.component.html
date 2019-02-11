@@ -20,9 +20,15 @@
     >
       <ion-label>
         <h3>Rok: {{ installment.InstallmentDate | date: 'dd.MM.yyyy' }}</h3>
-        <p>{{ installment.Amount }} RSD</p>
+        <p style="margin-bottom: 10px">{{ installment.Amount }} RSD</p>
         <ion-badge color="{{ getStatusColor(installment) }}" style=" font-variant: small-caps;">{{ installment.IsPaid ? 'plaćeno' : 'nije plaćeno' }}</ion-badge>
-        <ion-badge color="medium" style=" font-variant: small-caps;" *ngIf="installment.IsCanceled === true">Poništeno</ion-badge>
+        <ion-badge color="medium" style=" font-variant: small-caps;" *ngIf="installment.IsCanceled === true">Poništeno</ion-badge>&nbsp;&nbsp;
+        <ion-text *ngIf="installment.IsPaid">
+          <h4 style="font-size: x-small; margin-bottom: 10px;">{{ installment.PaymentDate | date: 'dd.MM.yyyy' }}</h4>
+        </ion-text>
+        <ion-text *ngIf="installment.Note">
+          <h4 style="font-size: x-small;">{{ installment.Note }}</h4>
+        </ion-text>
       </ion-label>
       <ion-icon slot="end" name="more" (click)="openActionSheet(installment)"></ion-icon>
     </ion-item>

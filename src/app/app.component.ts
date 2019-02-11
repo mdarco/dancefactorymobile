@@ -18,7 +18,7 @@ export class AppComponent {
     {
       title: 'Plesači',
       url: '/list',
-      icon: 'list'
+      icon: 'body'
     }
   ];
 

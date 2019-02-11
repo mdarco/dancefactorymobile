@@ -16,7 +16,7 @@ export class MembersService {
   memberDetails_content$ = this.memberDetails_contentSource.asObservable();
 
   apiUrl = environment.apiUrl;
-  rootUrl: string = '/api/members';
+  rootUrl = '/api/members';
 
   constructor(private http: HttpClient) { }
 
@@ -39,6 +39,11 @@ export class MembersService {
   getMemberPaymentInstallments(memberId, paymentId) {
     const url = this.apiUrl + this.rootUrl + '/' + memberId + '/payments/' + paymentId + '/installments?nd=' + Date.now();
     return this.http.get(url);
+  }
+
+  editMemberPaymentInstallment(memberId, paymentId, installmentId, model) {
+    const url = this.apiUrl + this.rootUrl + '/' + memberId + '/payments/' + paymentId + '/installments/' + installmentId;
+    return this.http.put(url, model);
   }
 
   setMemberDetailsHeaderMemberName(name: string) {
