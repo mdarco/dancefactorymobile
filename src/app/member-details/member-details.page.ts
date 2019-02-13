@@ -16,6 +16,7 @@ export class MemberDetailsPage implements OnInit, OnDestroy {
     AgeCategory: null,
     DanceGroups: null,
     Note: null,
+    IsActive: null,
     ContactData: {
       Address: null,
       Phone1: null,
