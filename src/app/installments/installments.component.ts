@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from '@ionic/angular';
 import * as moment from 'moment';
 
+import { AuthService } from '../services/auth/auth.service';
 import { MembersService } from '../services/members/members.service';
 
 @Component({
@@ -22,6 +23,7 @@ export class InstallmentsComponent implements OnInit, OnDestroy {
     private alertController: AlertController,
     private modalController: ModalController,
     private actionSheetController: ActionSheetController,
+    private authService: AuthService,
     private membersService: MembersService
   ) { }
 
@@ -93,11 +95,15 @@ export class InstallmentsComponent implements OnInit, OnDestroy {
     );
   }
 
+  userIsAdmin() {
+    if (this.authService.userModel.UserGroups && this.authService.userModel.UserGroups.length > 0) {
+      return this.authService.userModel.UserGroups.includes('ADMIN');
+    }
+  }
+
   async openActionSheet(installment) {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Plaćanja',
-      buttons: [{
-        text: (!installment.IsCanceled ? 'Poništi ratu' : 'Aktiviraj ratu'),
+    const button_cancelPayment = {
+      text: (!installment.IsCanceled ? 'Poništi ratu' : 'Aktiviraj ratu'),
         handler: () => {
           this.showConfirmDialog(
             'Da li ste sigurni?',
@@ -109,8 +115,10 @@ export class InstallmentsComponent implements OnInit, OnDestroy {
             }
           );
         }
-      }, {
-        text: 'Izmeni status (plaćeno/neplaćeno)',
+    };
+
+    const button_changeStatus = {
+      text: 'Izmeni status (plaćeno/neplaćeno)',
         handler: () => {
           this.showConfirmDialog(
             'Da li ste sigurni?',
@@ -122,12 +130,26 @@ export class InstallmentsComponent implements OnInit, OnDestroy {
             }
           );
         }
-      }, {
-        text: 'Zatvori',
+    };
+
+    const button_close = {
+      text: 'Zatvori',
         icon: 'close',
         role: 'cancel',
         handler: () => {}
-      }]
+    };
+
+    const buttons = [];
+    buttons.push(button_close);
+    buttons.push(button_changeStatus);
+
+    if (this.userIsAdmin()) {
+      buttons.push(button_cancelPayment);
+    }
+
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Plaćanja',
+      buttons
     });
     await actionSheet.present();
   }
