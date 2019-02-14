@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoadingController, AlertController, ToastController, ModalController } from '@ionic/angular';
 
+import { AuthService } from '../services/auth/auth.service';
 import { MembersService } from '../services/members/members.service';
 
 import { ListFilterComponent } from '../list-filter/list-filter.component';
@@ -26,6 +27,7 @@ export class ListPage implements OnInit, OnDestroy {
   membersDisplayed?: number = null;
 
   constructor(
+    private authService: AuthService,
     private membersService: MembersService,
     private loadingController: LoadingController,
     private alertController: AlertController,
@@ -34,11 +36,19 @@ export class ListPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.checkUserDanceGroups();
     this.applyFilter();
   }
 
   ngOnDestroy() {
     this.getMembers$.unsubscribe();
+  }
+
+  checkUserDanceGroups() {
+    // see if user a part of any dance groups and set filter accordingly
+    if (this.authService.userModel.UserDanceGroups && this.authService.userModel.UserDanceGroups.length > 0) {
+      this.filter.DanceGroupID = this.authService.userModel.UserDanceGroups[0].DanceGroupID;
+    }
   }
 
   async applyFilter(noConcat = false) {
@@ -89,6 +99,8 @@ export class ListPage implements OnInit, OnDestroy {
       FullName: undefined,
       DanceGroupID: undefined
     };
+
+    this.checkUserDanceGroups();
     this.applyFilter(true);
   }
 

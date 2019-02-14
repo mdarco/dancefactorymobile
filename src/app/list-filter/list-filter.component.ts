@@ -11,10 +11,12 @@ import { DanceGroupsService } from '../services/dance-groups/dance-groups.servic
 export class ListFilterComponent implements OnInit, OnDestroy {
   @Input() FullName: string;
   @Input() ExcludeNonActive: boolean;
+
   @Input() DanceGroupID: number;
+  danceGroupID = ''; // workaround for ion-select not displaying selected text when the value is number
 
   danceGroups: any = [];
-  
+
   modalData = {
     FullName: null,
     Status: null,
@@ -51,8 +53,10 @@ export class ListFilterComponent implements OnInit, OnDestroy {
         if (response && response['length'] > 0) {
           this.danceGroups = response;
 
-          // fill existing values
-          this.populateDialog();
+          setTimeout(() => {
+            // fill existing values
+            this.populateDialog();
+          }, 500);
         }
       },
       error => {
@@ -73,6 +77,7 @@ export class ListFilterComponent implements OnInit, OnDestroy {
 
     if (this.DanceGroupID) {
       this.modalData['DanceGroupID'] = this.DanceGroupID;
+      this.danceGroupID = 'dgid_' + this.DanceGroupID;
     }
 
     if (this.ExcludeNonActive) {
@@ -101,6 +106,10 @@ export class ListFilterComponent implements OnInit, OnDestroy {
   }
 
   applyFilter() {
+    if (this.danceGroupID) {
+      this.modalData['DanceGroupID'] = Number(this.danceGroupID.split('_')[1]);
+    }
+
     this.modalController.dismiss({
       filterData: this.modalData
     });
