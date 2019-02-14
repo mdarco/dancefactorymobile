@@ -11,7 +11,7 @@ import { DanceGroupsService } from '../services/dance-groups/dance-groups.servic
 export class ListFilterComponent implements OnInit, OnDestroy {
   @Input() FullName: string;
   @Input() ExcludeNonActive: boolean;
-
+  @Input() DanceGroups: Array<any>;
   @Input() DanceGroupID: number;
   danceGroupID = ''; // workaround for ion-select not displaying selected text when the value is number
 
@@ -37,7 +37,9 @@ export class ListFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.danceGroups$.unsubscribe();
+    if (this.danceGroups$) {
+      this.danceGroups$.unsubscribe();
+    }
   }
 
   async getDanceGroups() {
@@ -48,26 +50,40 @@ export class ListFilterComponent implements OnInit, OnDestroy {
 
     await loading.present();
 
-    this.danceGroups$ = this.danceGroupsService.getLookup().subscribe(
-      response => {
-        if (response && response['length'] > 0) {
-          this.danceGroups = response;
+    if (this.DanceGroups) {
+      this.danceGroups = this.DanceGroups.map(dg => {
+        return {
+          ID: dg.DanceGroupID,
+          Name: dg.DanceGroupName
+        };
+      });
 
-          setTimeout(() => {
-            // fill existing values
-            this.populateDialog();
-          }, 500);
-        }
-      },
-      error => {
-        console.error('DANCE GROUPS LOOKUP ERROR', error);
-        this.danceGroups = [];
-        this.showToast('Došlo je do greške prilikom preuzimanja spiska plesnih grupa.', 'danger');
-      },
-      () => {
+      setTimeout(() => {
+        this.populateDialog();
         loading.dismiss();
-      }
-    );
+      }, 500);
+    } else {
+      this.danceGroups$ = this.danceGroupsService.getLookup().subscribe(
+        response => {
+          if (response && response['length'] > 0) {
+            this.danceGroups = response;
+
+            setTimeout(() => {
+              this.populateDialog();
+            }, 500);
+          }
+        },
+        error => {
+          console.error('DANCE GROUPS LOOKUP ERROR', error);
+          loading.dismiss();
+          this.danceGroups = [];
+          this.showToast('Došlo je do greške prilikom preuzimanja spiska plesnih grupa.', 'danger');
+        },
+        () => {
+          loading.dismiss();
+        }
+      );
+    }
   }
 
   populateDialog() {
@@ -87,12 +103,23 @@ export class ListFilterComponent implements OnInit, OnDestroy {
     }
   }
 
+  applyFilter() {
+    if (this.danceGroupID) {
+      this.modalData['DanceGroupID'] = Number(this.danceGroupID.split('_')[1]);
+    }
+
+    this.modalController.dismiss({
+      filterData: this.modalData
+    });
+  }
+
   removeStatusSelection() {
     this.modalData['Status'] = undefined;
   }
 
   removeDanceGroupSelection() {
     this.modalData['DanceGroupID'] = undefined;
+    this.danceGroupID = '';
   }
 
   async showToast(message, color) {
@@ -103,16 +130,6 @@ export class ListFilterComponent implements OnInit, OnDestroy {
       color
     });
     await toast.present();
-  }
-
-  applyFilter() {
-    if (this.danceGroupID) {
-      this.modalData['DanceGroupID'] = Number(this.danceGroupID.split('_')[1]);
-    }
-
-    this.modalController.dismiss({
-      filterData: this.modalData
-    });
   }
 
   cancel() {

@@ -51,7 +51,7 @@
 
     <ion-item>
       <ion-label>Grupa</ion-label>
-      <ion-select [(ngModel)]="danceGroupID" name="dancegroup" placeholder="Izaberite grupu" cancelText="Odustani">
+      <ion-select [(ngModel)]="danceGroupID" name="dancegroup" placeholder="Izaberite grupu" cancelText="Odustani" [disabled]="danceGroups.length === 1">
         <ion-select-option *ngFor="let group of danceGroups" value="{{ 'dgid_' + group.ID }}">{{ group.Name }}</ion-select-option>
       </ion-select>
 
