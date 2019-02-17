@@ -27,6 +27,8 @@ export class ListPage implements OnInit, OnDestroy {
   membersTotal?: number = null;
   membersDisplayed?: number = null;
 
+  disableInfiniteScroll = false;
+
   constructor(
     private authService: AuthService,
     private membersService: MembersService,
@@ -54,6 +56,7 @@ export class ListPage implements OnInit, OnDestroy {
   }
 
   async applyFilter(noConcat = false) {
+    this.disableInfiniteScroll = false;
     const loading = await this.loadingController.create({
       spinner: 'circles',
       message: 'Molim Vas, sačekajte...'
@@ -108,7 +111,8 @@ export class ListPage implements OnInit, OnDestroy {
 
   async onInfiniteScroll(event) {
     if (this.membersDisplayed === this.membersTotal) {
-      event.target.disabled = true;
+      // event.target.disabled = true;
+      this.disableInfiniteScroll = true;
     } else {
       this.filter.PageNo++;
       await this.applyFilter();
