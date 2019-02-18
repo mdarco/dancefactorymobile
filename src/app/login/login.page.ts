@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LoadingController, AlertController } from '@ionic/angular';
+import { LoadingController, AlertController, Platform } from '@ionic/angular';
 
 import { AuthService } from '../services/auth/auth.service';
 import { environment } from '../../environments/environment';
@@ -14,8 +14,10 @@ export class LoginPage implements OnInit, OnDestroy {
   password: string;
 
   private login$: any;
+  private backButton$: any;
 
   constructor(
+    private platform: Platform,
     private authService: AuthService,
     private loadingController: LoadingController,
     private alertController: AlertController
@@ -25,6 +27,16 @@ export class LoginPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.login$.unsubscribe();
+  }
+
+  ionViewDidEnter(){
+    this.backButton$ = this.platform.backButton.subscribe(()=>{
+      navigator['app'].exitApp();
+    });
+  }
+
+  ionViewWillLeave() {
+    this.backButton$.unsubscribe();
   }
 
   async login() {
