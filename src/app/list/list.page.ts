@@ -39,6 +39,7 @@ export class ListPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.disableInfiniteScroll = false;
     this.checkUserDanceGroups();
     this.applyFilter();
   }
@@ -56,7 +57,7 @@ export class ListPage implements OnInit, OnDestroy {
   }
 
   async applyFilter(noConcat = false) {
-    this.disableInfiniteScroll = false;
+    // this.disableInfiniteScroll = false;
     const loading = await this.loadingController.create({
       spinner: 'circles',
       message: 'Molim Vas, sačekajte...'
@@ -105,6 +106,7 @@ export class ListPage implements OnInit, OnDestroy {
       DanceGroupID: undefined
     };
 
+    this.disableInfiniteScroll = false;
     this.checkUserDanceGroups();
     this.applyFilter(true);
   }
@@ -172,6 +174,7 @@ export class ListPage implements OnInit, OnDestroy {
         this.filter.DanceGroupID = undefined;
       }
 
+      this.disableInfiniteScroll = false;
       this.applyFilter(true);
     }
   }
