@@ -27,8 +27,6 @@ export class ListPage implements OnInit, OnDestroy {
   membersTotal?: number = null;
   membersDisplayed?: number = null;
 
-  disableInfiniteScroll = false;
-
   constructor(
     private authService: AuthService,
     private membersService: MembersService,
@@ -39,7 +37,6 @@ export class ListPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.disableInfiniteScroll = false;
     this.checkUserDanceGroups();
     this.applyFilter();
   }
@@ -57,7 +54,6 @@ export class ListPage implements OnInit, OnDestroy {
   }
 
   async applyFilter(noConcat = false) {
-    // this.disableInfiniteScroll = false;
     const loading = await this.loadingController.create({
       spinner: 'circles',
       message: 'Molim Vas, sačekajte...'
@@ -106,20 +102,18 @@ export class ListPage implements OnInit, OnDestroy {
       DanceGroupID: undefined
     };
 
-    this.disableInfiniteScroll = false;
     this.checkUserDanceGroups();
     this.applyFilter(true);
   }
 
   async onInfiniteScroll(event) {
-    if (this.membersDisplayed === this.membersTotal) {
+    // if (this.membersDisplayed === this.membersTotal) {
       // event.target.disabled = true;
-      this.disableInfiniteScroll = true;
-    } else {
+    // } else {
       this.filter.PageNo++;
       await this.applyFilter();
       event.target.complete();
-    }
+    // }
   }
 
   setHeaderMemberName(name) {
@@ -174,7 +168,6 @@ export class ListPage implements OnInit, OnDestroy {
         this.filter.DanceGroupID = undefined;
       }
 
-      this.disableInfiniteScroll = false;
       this.applyFilter(true);
     }
   }
