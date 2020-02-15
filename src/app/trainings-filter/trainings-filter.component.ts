@@ -3,6 +3,7 @@ import { LoadingController, ToastController, ModalController } from '@ionic/angu
 
 import { AuthService } from '../services/auth/auth.service';
 import { DanceGroupsService } from '../services/dance-groups/dance-groups.service';
+import { LookupService } from '../services/lookup/lookup.service';
 
 @Component({
   selector: 'app-trainings-filter',
@@ -46,7 +47,8 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
     private toastController: ToastController,
     private modalController: ModalController,
     private authService: AuthService,
-    private danceGroupsService: DanceGroupsService
+    private danceGroupsService: DanceGroupsService,
+    private lookupService: LookupService
   ) { }
 
   ngOnInit() {
