@@ -1,3 +1,39 @@
-<p>
-  trainings-filter works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">ODUSTANI</ion-button>
+    </ion-buttons>
+
+    <ion-title>Filter</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="applyFilter()" strong>OK</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form>
+    <ion-item-divider color="light">
+      <ion-label>Grupa</ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-label>Grupa</ion-label>
+      <ion-select [(ngModel)]="trainingDanceGroupID" name="dancegroup" placeholder="Izaberite grupu" cancelText="Odustani" [disabled]="danceGroups.length === 1">
+        <ion-select-option *ngFor="let group of danceGroups" value="{{ 'dgid_' + group.ID }}">{{ group.Name }}</ion-select-option>
+      </ion-select>
+
+      <ion-button
+        style="z-index: 1000 !important;"
+        size="small"
+        fill="outline"
+        color="medium"
+        [hidden]="modalData.TrainingDanceGroupID === undefined"
+        (click)="removeTrainingDanceGroupSelection()"
+      >
+          <ion-icon name='close'></ion-icon>
+      </ion-button>
+    </ion-item>
+  </form>
+</ion-content>

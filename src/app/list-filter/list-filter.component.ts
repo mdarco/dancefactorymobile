@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { LoadingController, ToastController, ModalController } from '@ionic/angular';
 
+import { AuthService } from '../services/auth/auth.service';
 import { DanceGroupsService } from '../services/dance-groups/dance-groups.service';
 
 @Component({
@@ -29,6 +30,7 @@ export class ListFilterComponent implements OnInit, OnDestroy {
     private loadingController: LoadingController,
     private toastController: ToastController,
     private modalController: ModalController,
+    private authService: AuthService,
     private danceGroupsService: DanceGroupsService
   ) { }
 
@@ -67,6 +69,16 @@ export class ListFilterComponent implements OnInit, OnDestroy {
         response => {
           if (response && response['length'] > 0) {
             this.danceGroups = response;
+
+            // if user is not Admin, limit dance groups to the dance groups user belongs to
+            if (!this.authService.isAdmin()) {
+              let userDanceGroups = this.authService.userModel.UserDanceGroups;
+              if (userDanceGroups && userDanceGroups.length > 0) {
+                this.danceGroups = this.danceGroups.filter(group => {
+                  return !userDanceGroups.includes(group.Name);
+                });
+              }
+            }
 
             setTimeout(() => {
               this.populateDialog();
