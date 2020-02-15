@@ -1,9 +1,49 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>trainings</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Treninzi
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="resetFilter()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+      <ion-button (click)="showFilterDialog()">
+        <ion-icon slot="icon-only" name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
+  <ion-list #trainingsList>
+    <ion-list-header>
+      <ion-label [hidden]="trainings.length > 0">Lista je prazna.</ion-label>
+      <ion-label [hidden]="trainings.length === 0">Ukupno: {{ trainingsTotal }} | Prikazano: {{ trainingsDisplayed }}</ion-label>
+    </ion-list-header>
+    <ion-item
+      *ngFor="let training of trainings"
+      [hidden]="trainings.length === 0"
+      routerLink="/list/{{training.TrainingID}}"
+      routerDirection="forward"
+      style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;"
+    >
+      <ion-label>
+        <h3 style="font-weight: bold;">{{training.TrainingDate | date: 'dd.MM.yyyy'}} [{{training.StartTime | slice:0:5}} - {{training.EndTime | slice:0:5}}]</h3>
+        <p>{{training.TrainingLocationName}} | <span>{{training.TrainerUserName}}</span></p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 
+  <ion-infinite-scroll threshold="10%" (ionInfinite)="onInfiniteScroll($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" #fab>
+    <ion-fab-button (click)="showAddTrainingDialog()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

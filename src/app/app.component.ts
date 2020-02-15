@@ -18,6 +18,11 @@ export class AppComponent {
     {
       title: 'Plesači',
       url: '/list',
+      icon: 'people'
+    },
+    {
+      title: 'Treninzi',
+      url: '/trainings',
       icon: 'body'
     }
   ];

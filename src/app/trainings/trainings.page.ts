@@ -17,6 +17,7 @@ export class TrainingsPage implements OnInit, OnDestroy {
   filter: any = {
     PageNo: 1,
     RecordsPerPage: 10,
+    OrderByClause: 'TrainingDate desc, TrainingLocationName, StartTime',
     TrainingDate: undefined,
     TrainingLocationID: undefined,
     TrainingDanceGroupID: undefined,

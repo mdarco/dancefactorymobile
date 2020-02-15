@@ -13,7 +13,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from '../environments/environment';
-import { TrainingsFilterComponent } from './trainings-filter/trainings-filter.component';
 
 export function jwtOptionsFactory(storage) {
   return {
@@ -27,8 +26,7 @@ export function jwtOptionsFactory(storage) {
 
 @NgModule({
   declarations: [
-    AppComponent,
-    TrainingsFilterComponent
+    AppComponent
   ],
   entryComponents: [],
   imports: [
