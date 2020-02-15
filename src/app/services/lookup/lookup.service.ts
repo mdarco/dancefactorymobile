@@ -12,6 +12,11 @@ export class LookupService {
 
   constructor(private http: HttpClient) { }
 
+  getLocations() {
+    const url = this.apiUrl + this.rootUrl + '/locations?nd=' + Date.now();
+    return this.http.get(url);
+  }
+
   getTrainers() {
     const url = this.apiUrl + this.rootUrl + '/trainers?nd=' + Date.now();
     return this.http.get(url);

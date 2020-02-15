@@ -1,9 +1,11 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { forkJoin, of } from 'rxjs';
 import { LoadingController, ToastController, ModalController } from '@ionic/angular';
 
 import { AuthService } from '../services/auth/auth.service';
 import { DanceGroupsService } from '../services/dance-groups/dance-groups.service';
 import { LookupService } from '../services/lookup/lookup.service';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-trainings-filter',
@@ -14,15 +16,12 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
   @Input() TrainingDate: string;
   @Input() WeekDay: string;
 
-  @Input() TrainingDanceGroups: Array<any>;
   @Input() TrainingDanceGroupID: number;
   trainingDanceGroupID = ''; // workaround for ion-select not displaying selected text when the value is number
 
-  @Input() TrainingLocations: Array<any>;
   @Input() TrainingLocationID: number;
   trainingLocationID = ''; // workaround for ion-select not displaying selected text when the value is number
 
-  @Input() TrainingUsers: Array<any>;
   @Input() TrainingUserID: number;
   trainingUserID = ''; // workaround for ion-select not displaying selected text when the value is number
 
@@ -52,26 +51,12 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.getDanceGroups();
-    // this.getLocations();
-    // this.getTrainers();
+    this.getCombos();
   }
 
-  ngOnDestroy() {
-    if (this.danceGroups$) {
-      this.danceGroups$.unsubscribe();
-    }
+  ngOnDestroy() { }
 
-    if (this.locations$) {
-      this.locations$.unsubscribe();
-    }
-
-    if (this.trainers$) {
-      this.trainers$.unsubscribe();
-    }
-  }
-
-  async getDanceGroups() {
+  async getCombos() {
     const loading = await this.loadingController.create({
       spinner: 'circles',
       message: 'Učitavanje grupa u toku..'
@@ -79,50 +64,38 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
 
     await loading.present();
 
-    if (this.TrainingDanceGroups) {
-      this.danceGroups = this.TrainingDanceGroups.map(dg => {
-        return {
-          ID: dg.DanceGroupID,
-          Name: dg.DanceGroupName
-        };
-      });
+    this.danceGroups$ = this.danceGroupsService.getLookup().pipe(catchError(err => of('error_dancegroups')));
+    this.locations$ = this.lookupService.getLocations().pipe(catchError(err => of('error_locations')));
+    this.trainers$ = this.lookupService.getTrainers().pipe(catchError(err => of('error_trainers')));
 
-      setTimeout(() => {
-        this.populateDialog();
-        loading.dismiss();
-      }, 500);
-    } else {
-      this.danceGroups$ = this.danceGroupsService.getLookup().subscribe(
-        response => {
-          if (response && response['length'] > 0) {
-            this.danceGroups = response;
+    forkJoin([this.danceGroups$, this.locations$, this.trainers$]).subscribe(combos => {
+      if (combos[0] !== 'error_dancegroups') {
+        console.log('dance_groups', combos[0]);
+        this.danceGroups = combos[0];
+      }
 
-            // if user is not Admin, limit dance groups to the dance groups user belongs to
-            if (!this.authService.isAdmin()) {
-              let userDanceGroups = this.authService.userModel.UserDanceGroups;
-              if (userDanceGroups && userDanceGroups.length > 0) {
-                this.danceGroups = this.danceGroups.filter(group => {
-                  return !userDanceGroups.includes(group.Name);
-                });
-              }
-            }
+      if (combos[1] !== 'error_locations') {
+        console.log('locations', combos[1]);
+        this.locations = combos[1];
+      }
 
-            setTimeout(() => {
-              this.populateDialog();
-            }, 500);
-          }
-        },
-        error => {
-          console.error('DANCE GROUPS LOOKUP ERROR', error);
-          loading.dismiss();
-          this.danceGroups = [];
-          this.showToast('Došlo je do greške prilikom preuzimanja spiska plesnih grupa.', 'danger');
-        },
-        () => {
-          loading.dismiss();
+      if (combos[2] !== 'error_trainers') {
+        console.log('trainers', combos[2]);
+        this.trainers = combos[2];
+      }
+
+      // if user is not Admin, limit dance groups to the dance groups user belongs to
+      if (!this.authService.isAdmin()) {
+        let userDanceGroups = this.authService.userModel.UserDanceGroups;
+        if (userDanceGroups && userDanceGroups.length > 0) {
+          this.danceGroups = this.danceGroups.filter(group => {
+            return !userDanceGroups.includes(group.Name);
+          });
         }
-      );
-    }
+      }
+
+      loading.dismiss();
+    });
   }
 
   populateDialog() {

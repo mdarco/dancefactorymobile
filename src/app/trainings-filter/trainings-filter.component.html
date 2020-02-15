@@ -14,10 +14,6 @@
 
 <ion-content>
   <form>
-    <ion-item-divider color="light">
-      <ion-label>Grupa</ion-label>
-    </ion-item-divider>
-
     <ion-item>
       <ion-label>Grupa</ion-label>
       <ion-select [(ngModel)]="trainingDanceGroupID" name="dancegroup" placeholder="Izaberite grupu" cancelText="Odustani" [disabled]="danceGroups.length === 1">
@@ -31,6 +27,42 @@
         color="medium"
         [hidden]="modalData.TrainingDanceGroupID === undefined"
         (click)="removeTrainingDanceGroupSelection()"
+      >
+          <ion-icon name='close'></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Lokacija</ion-label>
+      <ion-select [(ngModel)]="trainingLocationID" name="location" placeholder="Izaberite lokaciju" cancelText="Odustani" [disabled]="locations.length === 1">
+        <ion-select-option *ngFor="let location of locations" value="{{ 'locid_' + location.ID }}">{{ location.Name }}</ion-select-option>
+      </ion-select>
+
+      <ion-button
+        style="z-index: 1000 !important;"
+        size="small"
+        fill="outline"
+        color="medium"
+        [hidden]="modalData.TrainingLocationID === undefined"
+        (click)="removeTrainingLocationSelection()"
+      >
+          <ion-icon name='close'></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Trener</ion-label>
+      <ion-select [(ngModel)]="trainingUserID" name="trainer" placeholder="Izaberite trenera" cancelText="Odustani" [disabled]="trainers.length === 1">
+        <ion-select-option *ngFor="let trainer of trainers" value="{{ 'trainerid_' + trainer.ID }}">{{ trainer.Name }}</ion-select-option>
+      </ion-select>
+
+      <ion-button
+        style="z-index: 1000 !important;"
+        size="small"
+        fill="outline"
+        color="medium"
+        [hidden]="modalData.TrainingUserID === undefined"
+        (click)="removeTrainingUserSelection()"
       >
           <ion-icon name='close'></ion-icon>
       </ion-button>
