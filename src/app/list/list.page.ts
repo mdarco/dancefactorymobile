@@ -46,7 +46,7 @@ export class ListPage implements OnInit, OnDestroy {
   }
 
   checkUserDanceGroups() {
-    // see if user a part of any dance groups and set filter accordingly
+    // see if user is a part of any dance groups and set filter accordingly
     if (this.authService.userModel.UserDanceGroups && this.authService.userModel.UserDanceGroups.length > 0) {
       this.filter.DanceGroups = this.authService.userModel.UserDanceGroups;
       this.filter.DanceGroupID = this.authService.userModel.UserDanceGroups[0].DanceGroupID;

@@ -75,6 +75,14 @@ export class AuthService {
     return this.authenticationState.value;
   }
 
+  isAdmin() {
+    return this.userModel && this.userModel.UserGroups && this.userModel.UserGroups.length > 0 && this.userModel.UserGroups.includes('ADMIN');
+  }
+
+  isTrainer() {
+    return this.userModel && this.userModel.UserGroups && this.userModel.UserGroups.length > 0 && this.userModel.UserGroups.includes('TRENER');
+  }
+
   showAlert(msg: string) {
     const alert = this.alertController.create({
       message: msg,
