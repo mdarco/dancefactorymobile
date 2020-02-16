@@ -31,8 +31,12 @@ const routes: Routes = [
     path: 'trainings',
     loadChildren: './trainings/trainings.module#TrainingsPageModule',
     canActivate: [UserAuthenticatedGuardService]
+  },
+  { 
+    path: 'trainings/:id/member-presence', 
+    loadChildren: './trainings-member-presence/trainings-member-presence/trainings-member-presence.module#TrainingsMemberPresencePageModule',
+    canActivate: [UserAuthenticatedGuardService]
   }
-
 ];
 
 @NgModule({
