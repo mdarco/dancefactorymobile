@@ -14,6 +14,8 @@ import { catchError } from 'rxjs/operators';
 })
 export class TrainingsFilterComponent implements OnInit, OnDestroy {
   @Input() TrainingDate: string;
+  trainingDate = null;
+
   @Input() WeekDay: string;
 
   @Input() TrainingDanceGroupID: number;
@@ -22,8 +24,8 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
   @Input() TrainingLocationID: number;
   trainingLocationID = ''; // workaround for ion-select not displaying selected text when the value is number
 
-  @Input() TrainingUserID: number;
-  trainingUserID = ''; // workaround for ion-select not displaying selected text when the value is number
+  @Input() TrainerUserID: number;
+  trainerUserID = ''; // workaround for ion-select not displaying selected text when the value is number
 
   danceGroups: any = [];
   locations: any = [];
@@ -34,7 +36,7 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
     WeekDay: null,
     TrainingDanceGroupID: null,
     TrainingLocationID: null,
-    TrainingUserID: null
+    TrainerUserID: null
   };
 
   private danceGroups$: any;
@@ -70,17 +72,17 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
 
     forkJoin([this.danceGroups$, this.locations$, this.trainers$]).subscribe(combos => {
       if (combos[0] !== 'error_dancegroups') {
-        console.log('dance_groups', combos[0]);
+        // console.log('dance_groups', combos[0]);
         this.danceGroups = combos[0];
       }
 
       if (combos[1] !== 'error_locations') {
-        console.log('locations', combos[1]);
+        // console.log('locations', combos[1]);
         this.locations = combos[1];
       }
 
       if (combos[2] !== 'error_trainers') {
-        console.log('trainers', combos[2]);
+        // console.log('trainers', combos[2]);
         this.trainers = combos[2];
       }
 
@@ -94,13 +96,17 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
         }
       }
 
-      loading.dismiss();
+      setTimeout(() => {
+        this.populateDialog();
+        loading.dismiss();
+      }, 500);
     });
   }
 
   populateDialog() {
     if (this.TrainingDate) {
       this.modalData['TrainingDate'] = this.TrainingDate;
+      this.trainingDate = this.TrainingDate;
     }
 
     if (this.WeekDay) {
@@ -117,13 +123,17 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
       this.trainingLocationID = 'locid_' + this.TrainingLocationID;
     }
 
-    if (this.TrainingUserID) {
-      this.modalData['TrainingUserID'] = this.TrainingUserID;
-      this.trainingUserID = 'trainerid_' + this.TrainingUserID;
+    if (this.TrainerUserID) {
+      this.modalData['TrainerUserID'] = this.TrainerUserID;
+      this.trainerUserID = 'trainerid_' + this.TrainerUserID;
     }
   }
 
   applyFilter() {
+    if (this.trainingDate) {
+      this.modalData['TrainingDate'] = this.trainingDate;
+    }
+
     if (this.trainingDanceGroupID) {
       this.modalData['TrainingDanceGroupID'] = Number(this.trainingDanceGroupID.split('_')[1]);
     }
@@ -132,8 +142,8 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
       this.modalData['TrainingLocationID'] = Number(this.trainingLocationID.split('_')[1]);
     }
 
-    if (this.trainingUserID) {
-      this.modalData['TrainingUserID'] = Number(this.trainingUserID.split('_')[1]);
+    if (this.trainerUserID) {
+      this.modalData['TrainerUserID'] = Number(this.trainerUserID.split('_')[1]);
     }
 
     this.modalController.dismiss({
@@ -152,8 +162,13 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
   }
 
   removeTrainingUserSelection() {
-    this.modalData['TrainingUserID'] = undefined;
-    this.trainingUserID = '';
+    this.modalData['TrainerUserID'] = undefined;
+    this.trainerUserID = '';
+  }
+
+  removeTrainingDateSelection() {
+    this.modalData['TrainingDate'] = undefined;
+    this.trainingDate = '';
   }
 
   async showToast(message, color) {

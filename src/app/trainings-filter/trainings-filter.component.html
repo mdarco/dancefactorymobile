@@ -14,6 +14,23 @@
 
 <ion-content>
   <form>
+    <!-- Training date -->
+    <ion-item>
+      <ion-label>Datum treninga</ion-label>
+      <ion-datetime [(ngModel)]="trainingDate" name="trainingdate" displayFormat="DD.MM.YYYY" value="" placeholder="Izaberite datum"></ion-datetime>
+
+      <ion-button
+        style="z-index: 1000 !important;"
+        size="small"
+        fill="outline"
+        color="medium"
+        (click)="removeTrainingDateSelection()"
+      >
+          <ion-icon name='close'></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <!-- Dance group -->
     <ion-item>
       <ion-label>Grupa</ion-label>
       <ion-select [(ngModel)]="trainingDanceGroupID" name="dancegroup" placeholder="Izaberite grupu" cancelText="Odustani" [disabled]="danceGroups.length === 1">
@@ -25,13 +42,13 @@
         size="small"
         fill="outline"
         color="medium"
-        [hidden]="modalData.TrainingDanceGroupID === undefined"
         (click)="removeTrainingDanceGroupSelection()"
       >
           <ion-icon name='close'></ion-icon>
       </ion-button>
     </ion-item>
 
+    <!-- Location -->
     <ion-item>
       <ion-label>Lokacija</ion-label>
       <ion-select [(ngModel)]="trainingLocationID" name="location" placeholder="Izaberite lokaciju" cancelText="Odustani" [disabled]="locations.length === 1">
@@ -43,16 +60,16 @@
         size="small"
         fill="outline"
         color="medium"
-        [hidden]="modalData.TrainingLocationID === undefined"
         (click)="removeTrainingLocationSelection()"
       >
           <ion-icon name='close'></ion-icon>
       </ion-button>
     </ion-item>
 
+    <!-- Trainer -->
     <ion-item>
       <ion-label>Trener</ion-label>
-      <ion-select [(ngModel)]="trainingUserID" name="trainer" placeholder="Izaberite trenera" cancelText="Odustani" [disabled]="trainers.length === 1">
+      <ion-select [(ngModel)]="trainerUserID" name="trainer" placeholder="Izaberite trenera" cancelText="Odustani" [disabled]="trainers.length === 1">
         <ion-select-option *ngFor="let trainer of trainers" value="{{ 'trainerid_' + trainer.ID }}">{{ trainer.Name }}</ion-select-option>
       </ion-select>
 
@@ -61,7 +78,6 @@
         size="small"
         fill="outline"
         color="medium"
-        [hidden]="modalData.TrainingUserID === undefined"
         (click)="removeTrainingUserSelection()"
       >
           <ion-icon name='close'></ion-icon>

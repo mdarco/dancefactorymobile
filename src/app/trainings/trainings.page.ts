@@ -123,10 +123,35 @@ export class TrainingsPage implements OnInit, OnDestroy {
     const { data } = await modal.onDidDismiss();
 
     if (data && data.filterData) {
+      // set filter values here
+      //console.log('FILTER DATA', data.filterData);
       this.filter.PageNo = 1;
 
-      // TODO: set filter values here..
+      if (data.filterData.TrainingDate) {
+        this.filter.TrainingDate = data.filterData.TrainingDate;
+      } else {
+        this.filter.TrainingDate = undefined;
+      }
 
+      if (data.filterData.TrainingLocationID) {
+        this.filter.TrainingLocationID = data.filterData.TrainingLocationID;
+      } else {
+        this.filter.TrainingLocationID = undefined;
+      }
+
+      if (data.filterData.TrainingDanceGroupID) {
+        this.filter.TrainingDanceGroupID = data.filterData.TrainingDanceGroupID;
+      } else {
+        this.filter.TrainingDanceGroupID = undefined;
+      }
+
+      if (data.filterData.TrainerUserID) {
+        this.filter.TrainerUserID = data.filterData.TrainerUserID;
+      } else {
+        this.filter.TrainerUserID = undefined;
+      }
+
+      // console.log('FILTER', this.filter);
       this.applyFilter(true);
     }
   }
