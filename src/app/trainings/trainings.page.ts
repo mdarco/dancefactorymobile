@@ -84,7 +84,7 @@ export class TrainingsPage implements OnInit, OnDestroy {
         this.trainings = [];
         this.trainingsTotal = null;
         this.trainingsDisplayed = null;
-        this.showAlert('Došlo je do greške prilikom preuzimanja liste trenings.');
+        this.showAlert('Došlo je do greške prilikom preuzimanja liste treninga.');
         loading.dismiss();
       },
       () => {
