@@ -34,7 +34,7 @@ const routes: Routes = [
   },
   { 
     path: 'trainings/:id/member-presence', 
-    loadChildren: './trainings-member-presence/trainings-member-presence/trainings-member-presence.module#TrainingsMemberPresencePageModule',
+    loadChildren: './trainings-member-presence/trainings-member-presence.module#TrainingsMemberPresencePageModule',
     canActivate: [UserAuthenticatedGuardService]
   }
 ];
