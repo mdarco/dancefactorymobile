@@ -40,12 +40,12 @@ export class TrainingsService {
 
   //#region Member presence
 
-  getMemberPresenceRegistrations(id: number) {
+  getMemberPresence(id: number) {
     const url = this.apiUrl + this.rootUrl + '/' + id + '/member-presence?nd=' + Date.now();
     return this.http.get(url);
   }
 
-  updateMemberPresenceRegistration(id: number, memberId: number, model: any) {
+  updateMemberPresence(id: number, memberId: number, model: any) {
     const url = this.apiUrl + this.rootUrl + '/' + id + '/member-presence/' + memberId + '?nd=' + Date.now();
     return this.http.post(url, model);
   }
