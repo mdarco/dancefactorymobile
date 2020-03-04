@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LoadingController, AlertController } from '@ionic/angular';
+import { LoadingController, AlertController, ActionSheetController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
 import { TrainingsService } from '../services/trainings/trainings.service';
@@ -16,17 +16,20 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
   private membersTotalCount: number;
   private membersPresentCount: number;
 
+  private trainingId: number;
+
   constructor(
     private route: ActivatedRoute,
     private alertController: AlertController,
     private loadingController: LoadingController,
+    private actionSheetController: ActionSheetController,
     private trainingsService: TrainingsService
   ) { }
 
   ngOnInit() {
     if (this.route.snapshot.paramMap.has('id')) {
-      let trainingId = Number(this.route.snapshot.paramMap.get('id'));
-      this.getMemberPresence(trainingId);
+      this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
+      this.getMemberPresence(this.trainingId);
     }
   }
 
@@ -63,6 +66,95 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
         loading.dismiss();
       }
     );
+  }
+
+  async openActionSheet(member) {
+    const button_changeMemberStatus = {
+      text: 'Izmeni status (prisutan/nije prisutan)',
+        handler: async () => {
+          const loading = await this.loadingController.create({
+            spinner: 'circles',
+            message: 'Molim Vas, sačekajte...'
+          });
+      
+          await loading.present();
+
+          this.trainingsService.updateMemberPresence(
+            this.trainingId,
+            member.MemberID,
+            { IsPresent: !member.IsPresent }
+          ).subscribe(
+            () => {
+              member.IsPresent = !member.IsPresent;
+            },
+            error => {
+              this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
+              loading.dismiss();
+            },
+            () => {
+              loading.dismiss();
+            }
+          );
+        }
+    };
+
+    const button_absenceJustified = {
+      text: 'Odsustvo opravdano? (da/ne)',
+        handler: async () => {
+          const loading = await this.loadingController.create({
+            spinner: 'circles',
+            message: 'Molim Vas, sačekajte...'
+          });
+      
+          await loading.present();
+
+          this.trainingsService.updateMemberPresence(
+            this.trainingId,
+            member.MemberID,
+            { AbsenceJustified: !member.AbsenceJustified }
+          ).subscribe(
+            () => {
+              member.AbsenceJustified = !member.AbsenceJustified;
+            },
+            error => {
+              this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
+              loading.dismiss();
+            },
+            () => {
+              loading.dismiss();
+            }
+          );
+        }
+    };
+
+    // const button_comment = {
+    //   text: 'Komentar',
+    //     handler: () => {
+    //       // TODO:
+    //     }
+    // };
+
+    const button_close = {
+      text: 'Zatvori',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {}
+    };
+
+    const buttons = [];
+    buttons.push(button_close);
+    buttons.push(button_changeMemberStatus);
+
+    if (!member.IsPresent) {
+      buttons.push(button_absenceJustified);
+      // buttons.push(button_comment);
+    }
+
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Prozivnik',
+      buttons
+    });
+    await actionSheet.present();
   }
 
   getStatusColor(member) {
