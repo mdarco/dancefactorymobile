@@ -168,7 +168,7 @@ export class TrainingsPage implements OnInit, OnDestroy {
 
     // console.log('DATA', data);
 
-    if (data.success) {
+    if (data && data.success) {
       await this.applyFilter(true);
     }
   }

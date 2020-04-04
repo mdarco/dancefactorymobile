@@ -7,6 +7,7 @@ import { AuthService } from '../services/auth/auth.service';
 import { DanceGroupsService } from '../services/dance-groups/dance-groups.service';
 import { LookupService } from '../services/lookup/lookup.service';
 import { TrainingsService } from '../services/trainings/trainings.service';
+import { UtilService } from '../services/util/util.service';
 
 @Component({
   selector: 'app-trainings-dialog',
@@ -34,10 +35,12 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private danceGroupsService: DanceGroupsService,
     private lookupService: LookupService,
-    private trainingsService: TrainingsService
+    private trainingsService: TrainingsService,
+    private utilService: UtilService
   ) { }
 
   ngOnInit() {
+    this.trainingDate = this.utilService.convertJsDateToIsoDate(new Date());
     this.getCombos();
   }
 
@@ -101,6 +104,11 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
 
     // console.log('TRAINING', model);
 
+    if (!this.validateModel(model)) {
+      this.showAlert('Niste popunili sve podatke.');
+      return;
+    }
+
     this.trainingsService.createTraining(model).subscribe(result => {
       // console.log('RESULT', result);
 
@@ -111,6 +119,18 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
       console.log('SAVE TRAINING ERROR', err);
       this.showAlert('Došlo je do greške prilikom snimanja treninga.');
     });
+  }
+
+  validateModel(model) {
+    if (
+      !model.TrainingDate ||
+      !model.TrainingScheduleID ||
+      !model.TrainingDanceGroupID ||
+      !model.TrainerUserID
+    ) {
+      return false;
+    }
+    return true;
   }
 
   removeTrainingDanceGroupSelection() {
