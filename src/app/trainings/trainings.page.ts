@@ -5,6 +5,7 @@ import { AuthService } from '../services/auth/auth.service';
 import { TrainingsService } from '../services/trainings/trainings.service';
 
 import { TrainingsFilterComponent } from '../trainings-filter/trainings-filter.component';
+import { TrainingsDialogComponent } from '../trainings-dialog/trainings-dialog.component';
 
 @Component({
   selector: 'app-trainings',
@@ -157,7 +158,11 @@ export class TrainingsPage implements OnInit, OnDestroy {
   }
 
   async showAddTrainingDialog() {
-    await this.showWipToast();
+    // await this.showWipToast();
+    const modal = await this.modalController.create({
+      component: TrainingsDialogComponent
+    });
+    await modal.present();
   }
 
   showAlert(msg: string) {

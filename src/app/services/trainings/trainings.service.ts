@@ -9,6 +9,7 @@ import { environment } from '../../../environments/environment';
 export class TrainingsService {
   apiUrl = environment.apiUrl;
   rootUrl = '/api/trainings';
+  rootUrl_schedules = '/api/training-schedules';
 
   constructor(private http: HttpClient) { }
 
@@ -37,6 +38,15 @@ export class TrainingsService {
     const url = this.apiUrl + this.rootUrl + '/' + id;
     return this.http.delete(url);
   }
+
+  //#region Training schedules
+
+  getTrainingSchedules() {
+    const url = this.apiUrl + this.rootUrl_schedules + '?nd=' + Date.now();
+    return this.http.get(url);
+  }
+
+  //#endregion
 
   //#region Member presence
 

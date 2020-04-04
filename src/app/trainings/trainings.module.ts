@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { TrainingsPage } from './trainings.page';
 import { TrainingsFilterComponent } from '../trainings-filter/trainings-filter.component';
+import { TrainingsDialogComponent } from '../trainings-dialog/trainings-dialog.component';
 
 @NgModule({
   imports: [
@@ -21,10 +22,12 @@ import { TrainingsFilterComponent } from '../trainings-filter/trainings-filter.c
   ],
   declarations: [
     TrainingsPage,
-    TrainingsFilterComponent
+    TrainingsFilterComponent,
+    TrainingsDialogComponent
   ],
   entryComponents: [
-    TrainingsFilterComponent
+    TrainingsFilterComponent,
+    TrainingsDialogComponent
   ]
 })
 export class TrainingsPageModule {}

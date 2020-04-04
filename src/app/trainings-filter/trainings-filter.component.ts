@@ -1,11 +1,11 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { LoadingController, ToastController, ModalController } from '@ionic/angular';
 
 import { AuthService } from '../services/auth/auth.service';
 import { DanceGroupsService } from '../services/dance-groups/dance-groups.service';
 import { LookupService } from '../services/lookup/lookup.service';
-import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-trainings-filter',
@@ -56,12 +56,14 @@ export class TrainingsFilterComponent implements OnInit, OnDestroy {
     this.getCombos();
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    // no need to unsubscribe from observables returned by 'forkJoin'
+  }
 
   async getCombos() {
     const loading = await this.loadingController.create({
       spinner: 'circles',
-      message: 'Učitavanje grupa u toku..'
+      message: 'Učitavanje podataka u toku..'
     });
 
     await loading.present();

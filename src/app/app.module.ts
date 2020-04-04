@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from '../environments/environment';
+import { TrainingsDialogComponent } from './trainings-dialog/trainings-dialog.component';
 
 export function jwtOptionsFactory(storage) {
   return {

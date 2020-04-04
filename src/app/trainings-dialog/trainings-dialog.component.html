@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">ODUSTANI</ion-button>
+    </ion-buttons>
+
+    <ion-title>Filter</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" strong>OK</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form>
+    <!-- Training date -->
+    <ion-item>
+      <ion-label>Datum treninga</ion-label>
+      <ion-datetime [(ngModel)]="trainingDate" name="trainingdate" displayFormat="DD.MM.YYYY" value="" placeholder="Izaberite datum"></ion-datetime>
+
+      <ion-button
+        style="z-index: 1000 !important;"
+        size="small"
+        fill="outline"
+        color="medium"
+        (click)="removeTrainingDateSelection()"
+      >
+          <ion-icon name='close'></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <!-- Dance group -->
+    <ion-item>
+      <ion-label>Grupa</ion-label>
+      <ion-select [(ngModel)]="trainingDanceGroupID" name="dancegroup" placeholder="Izaberite grupu" cancelText="Odustani" [disabled]="danceGroups.length === 1">
+        <ion-select-option *ngFor="let group of danceGroups" value="{{ 'dgid_' + group.ID }}">{{ group.Name }}</ion-select-option>
+      </ion-select>
+
+      <ion-button
+        style="z-index: 1000 !important;"
+        size="small"
+        fill="outline"
+        color="medium"
+        (click)="removeTrainingDanceGroupSelection()"
+      >
+          <ion-icon name='close'></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <!-- Training schedule -->
+    <ion-item>
+      <ion-label>Raspored</ion-label>
+      <ion-select [(ngModel)]="trainingScheduleID" name="schedule" placeholder="Izaberite raspored" cancelText="Odustani" [disabled]="schedules.length === 1">
+        <ion-select-option *ngFor="let schedule of schedules" value="{{ 'scheduleid_' + schedule.ID }}">{{ schedule.Name }}</ion-select-option>
+      </ion-select>
+
+      <ion-button
+        style="z-index: 1000 !important;"
+        size="small"
+        fill="outline"
+        color="medium"
+        (click)="removeTrainingScheduleSelection()"
+      >
+          <ion-icon name='close'></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <!-- Trainer -->
+    <ion-item>
+      <ion-label>Trener</ion-label>
+      <ion-select [(ngModel)]="trainerUserID" name="trainer" placeholder="Izaberite trenera" cancelText="Odustani" [disabled]="trainers.length === 1">
+        <ion-select-option *ngFor="let trainer of trainers" value="{{ 'trainerid_' + trainer.ID }}">{{ trainer.Name }}</ion-select-option>
+      </ion-select>
+
+      <ion-button
+        style="z-index: 1000 !important;"
+        size="small"
+        fill="outline"
+        color="medium"
+        (click)="removeTrainingUserSelection()"
+      >
+          <ion-icon name='close'></ion-icon>
+      </ion-button>
+    </ion-item>
+  </form>
+</ion-content>
