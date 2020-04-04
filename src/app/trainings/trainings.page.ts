@@ -163,6 +163,14 @@ export class TrainingsPage implements OnInit, OnDestroy {
       component: TrainingsDialogComponent
     });
     await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+
+    // console.log('DATA', data);
+
+    if (data.success) {
+      await this.applyFilter(true);
+    }
   }
 
   showAlert(msg: string) {

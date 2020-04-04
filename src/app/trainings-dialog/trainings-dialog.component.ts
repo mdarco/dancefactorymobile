@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { LoadingController, ToastController, ModalController } from '@ionic/angular';
+import { LoadingController, AlertController, ModalController } from '@ionic/angular';
 import { AuthService } from '../services/auth/auth.service';
 import { DanceGroupsService } from '../services/dance-groups/dance-groups.service';
 import { LookupService } from '../services/lookup/lookup.service';
@@ -29,7 +29,7 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
   
   constructor(
     private loadingController: LoadingController,
-    private toastController: ToastController,
+    private alertController: AlertController,
     private modalController: ModalController,
     private authService: AuthService,
     private danceGroupsService: DanceGroupsService,
@@ -91,6 +91,28 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
     });
   }
 
+  save() {
+    let model = {
+      TrainingDate: this.trainingDate,
+      TrainingScheduleID: this.trainingScheduleID,
+      TrainingDanceGroupID: this.trainingDanceGroupID,
+      TrainerUserID: this.trainerUserID
+    };
+
+    // console.log('TRAINING', model);
+
+    this.trainingsService.createTraining(model).subscribe(result => {
+      // console.log('RESULT', result);
+
+      this.modalController.dismiss({
+        success: true
+      });
+    }, err => {
+      console.log('SAVE TRAINING ERROR', err);
+      this.showAlert('Došlo je do greške prilikom snimanja treninga.');
+    });
+  }
+
   removeTrainingDanceGroupSelection() {
     this.trainingDanceGroupID = '';
   }
@@ -109,5 +131,14 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
 
   cancel() {
     this.modalController.dismiss();
+  }
+
+  showAlert(msg: string) {
+    const alert = this.alertController.create({
+      message: msg,
+      header: 'Greška',
+      buttons: ['OK']
+    });
+    alert.then(a => a.present());
   }
 }

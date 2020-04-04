@@ -16,7 +16,7 @@
   <form>
     <!-- Training date -->
     <ion-item>
-      <ion-label>Datum treninga</ion-label>
+      <ion-label>Datum treninga (*)</ion-label>
       <ion-datetime [(ngModel)]="trainingDate" name="trainingdate" displayFormat="DD.MM.YYYY" value="" placeholder="Izaberite datum"></ion-datetime>
 
       <ion-button
@@ -32,9 +32,9 @@
 
     <!-- Dance group -->
     <ion-item>
-      <ion-label>Grupa</ion-label>
+      <ion-label>Grupa (*)</ion-label>
       <ion-select [(ngModel)]="trainingDanceGroupID" name="dancegroup" placeholder="Izaberite grupu" cancelText="Odustani" [disabled]="danceGroups.length === 1">
-        <ion-select-option *ngFor="let group of danceGroups" value="{{ 'dgid_' + group.ID }}">{{ group.Name }}</ion-select-option>
+        <ion-select-option *ngFor="let group of danceGroups" value="{{ group.ID }}">{{ group.Name }}</ion-select-option>
       </ion-select>
 
       <ion-button
@@ -50,9 +50,9 @@
 
     <!-- Training schedule -->
     <ion-item>
-      <ion-label>Raspored</ion-label>
+      <ion-label>Raspored (*)</ion-label>
       <ion-select [(ngModel)]="trainingScheduleID" name="schedule" placeholder="Izaberite raspored" cancelText="Odustani" [disabled]="schedules.length === 1">
-        <ion-select-option *ngFor="let schedule of schedules" value="{{ 'scheduleid_' + schedule.ID }}">{{ schedule.Name }}</ion-select-option>
+        <ion-select-option *ngFor="let schedule of schedules" value="{{ schedule.ID }}">{{ schedule.Name }}</ion-select-option>
       </ion-select>
 
       <ion-button
@@ -68,9 +68,9 @@
 
     <!-- Trainer -->
     <ion-item>
-      <ion-label>Trener</ion-label>
+      <ion-label>Trener (*)</ion-label>
       <ion-select [(ngModel)]="trainerUserID" name="trainer" placeholder="Izaberite trenera" cancelText="Odustani" [disabled]="trainers.length === 1">
-        <ion-select-option *ngFor="let trainer of trainers" value="{{ 'trainerid_' + trainer.ID }}">{{ trainer.Name }}</ion-select-option>
+        <ion-select-option *ngFor="let trainer of trainers" value="{{ trainer.ID }}">{{ trainer.Name }}</ion-select-option>
       </ion-select>
 
       <ion-button
