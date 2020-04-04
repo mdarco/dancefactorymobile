@@ -17,7 +17,14 @@
     <!-- Training date -->
     <ion-item>
       <ion-label>Datum treninga (*)</ion-label>
-      <ion-datetime [(ngModel)]="trainingDate" name="trainingdate" displayFormat="DD.MM.YYYY" value="" placeholder="Izaberite datum"></ion-datetime>
+      <ion-datetime 
+        [(ngModel)]="trainingDate"
+        name="trainingdate"
+        displayFormat="DD.MM.YYYY"
+        value=""
+        placeholder="Izaberite datum"
+        (ionChange)="trainingDateChanged($event)">
+      </ion-datetime>
 
       <ion-button
         style="z-index: 1000 !important;"
@@ -51,8 +58,8 @@
     <!-- Training schedule -->
     <ion-item>
       <ion-label>Raspored (*)</ion-label>
-      <ion-select [(ngModel)]="trainingScheduleID" name="schedule" placeholder="Izaberite raspored" cancelText="Odustani" [disabled]="schedules.length === 1">
-        <ion-select-option *ngFor="let schedule of schedules" value="{{ schedule.ID }}">{{ schedule.Name }}</ion-select-option>
+      <ion-select [(ngModel)]="trainingScheduleID" name="schedule" placeholder="Izaberite raspored" cancelText="Odustani" [disabled]="!schedulesToDisplay || schedulesToDisplay.length === 1">
+        <ion-select-option *ngFor="let schedule of schedulesToDisplay" value="{{ schedule.ID }}">{{ schedule.Name }}</ion-select-option>
       </ion-select>
 
       <ion-button

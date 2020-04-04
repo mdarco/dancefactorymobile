@@ -22,6 +22,7 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
   
   danceGroups: any = [];
   schedules: any = [];
+  schedulesToDisplay: any = [];
   trainers: any = [];
 
   private danceGroups$: any;
@@ -69,6 +70,7 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
       if (combos[1] !== 'error_schedules') {
         // console.log('schedules', combos[1]);
         this.schedules = combos[1];
+        this.schedulesToDisplay = combos[1];
       }
 
       if (combos[2] !== 'error_trainers') {
@@ -90,6 +92,12 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
       // console.log(this.schedules);
       // console.log(this.trainers);
 
+      this.trainingDateChanged({
+        detail: {
+          value: this.trainingDate
+        }
+      });
+
       loading.dismiss();
     });
   }
@@ -109,7 +117,7 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.trainingsService.createTraining(model).subscribe(result => {
+    this.trainingsService.createTraining(model).subscribe(() => {
       // console.log('RESULT', result);
 
       this.modalController.dismiss({
@@ -131,6 +139,27 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
       return false;
     }
     return true;
+  }
+
+  trainingDateChanged(event) {
+    // console.log('NEW TRAINING DATE', event.detail.value);
+    this.trainingScheduleID = '';
+    this.schedulesToDisplay = null; // have to clear all items first
+
+    if (!event.detail.value) {
+      this.schedulesToDisplay = this.schedules;
+      return;
+    }
+
+    let newTrainingDate = new Date(event.detail.value);
+    let newWeekDay = newTrainingDate.getDay();
+
+    setTimeout(() => {
+      // filter schedules by training date's week day
+      this.schedulesToDisplay = this.schedules.filter(s => {
+        return s.WeekDayNo === newWeekDay;
+      });
+    }, 500);
   }
 
   removeTrainingDanceGroupSelection() {
