@@ -29,8 +29,8 @@ export class TrainingsService {
     return this.http.post(url, model);
   }
 
-  editTraining(id: number, model: any) {
-    const url = this.apiUrl + this.rootUrl + '/' + id;
+  editTraining(model: any) {
+    const url = this.apiUrl + this.rootUrl + '/' + model.id;
     return this.http.put(url, model);
   }
 

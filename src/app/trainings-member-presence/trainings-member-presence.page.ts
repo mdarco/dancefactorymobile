@@ -11,12 +11,14 @@ import { TrainingsService } from '../services/trainings/trainings.service';
 })
 export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
   private trainingMembers$: any;
+  private training$: any;
 
   private members: any;
   private membersTotalCount: number;
   private membersPresentCount: number;
 
   private trainingId: number;
+  private trainingNote: String = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -30,6 +32,7 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
     if (this.route.snapshot.paramMap.has('id')) {
       this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
       this.getMemberPresence(this.trainingId);
+      this.getTraining(this.trainingId);
     }
   }
 
@@ -37,6 +40,35 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
     if (this.trainingMembers$) {
       this.trainingMembers$.unsubscribe();
     }
+
+    if (this.training$) {
+      this.training$.unsubscribe();
+    }
+  }
+
+  async getTraining(id: number) {
+    const loading = await this.loadingController.create({
+      spinner: 'circles',
+      message: 'Molim Vas, sačekajte...'
+    });
+
+    await loading.present();
+
+    this.training$ = this.trainingsService.getTraining(id).subscribe(
+      (response: any) => {
+        // console.log('TRAINING', response);
+        this.trainingNote = response.Note;
+      },
+      error => {
+        // console.log('TRAINING MEMBERS ERROR', error);
+        this.members = [];
+        this.showAlert('Došlo je do greške prilikom preuzimanja komentara za trening.');
+        loading.dismiss();
+      },
+      () => {
+        loading.dismiss();
+      }
+    );
   }
 
   async getMemberPresence(trainingId: number) {
@@ -269,7 +301,8 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
       inputs: [
         {
           name: 'note',
-          type: 'text'
+          type: 'text',
+          value: this.trainingNote
         }
       ],
       buttons: [
@@ -279,59 +312,32 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
           handler: () => {}
         },
         {
-          text: 'Obriši',
-          handler: async () => {
-            // const loading = await this.loadingController.create({
-            //   spinner: 'circles',
-            //   message: 'Molim Vas, sačekajte...'
-            // });
-        
-            // await loading.present();
-  
-            // this.trainingsService.updateMemberPresence(
-            //   this.trainingId,
-            //   member.MemberID,
-            //   { ForceDeleteAbsenceNote: true }
-            // ).subscribe(
-            //   () => {
-            //     member.AbsenceNote = null;
-            //   },
-            //   error => {
-            //     this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
-            //     loading.dismiss();
-            //   },
-            //   () => {
-            //     loading.dismiss();
-            //   }
-            // );
-          }
-        },
-        {
           text: 'Ok',
           handler: async (propmptTextObj) => {
-            // const loading = await this.loadingController.create({
-            //   spinner: 'circles',
-            //   message: 'Molim Vas, sačekajte...'
-            // });
+            const loading = await this.loadingController.create({
+              spinner: 'circles',
+              message: 'Molim Vas, sačekajte...'
+            });
         
-            // await loading.present();
+            await loading.present();
   
-            // this.trainingsService.updateMemberPresence(
-            //   this.trainingId,
-            //   member.MemberID,
-            //   { AbsenceNote: propmptTextObj.note }
-            // ).subscribe(
-            //   () => {
-            //     member.AbsenceNote = propmptTextObj.note;
-            //   },
-            //   error => {
-            //     this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
-            //     loading.dismiss();
-            //   },
-            //   () => {
-            //     loading.dismiss();
-            //   }
-            // );
+            this.trainingsService.editTraining(
+              { 
+                TrainingID: this.trainingId,
+                Note: propmptTextObj.note
+              }
+            ).subscribe(
+              () => {
+                this.trainingNote = propmptTextObj.note;
+              },
+              error => {
+                this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
+                loading.dismiss();
+              },
+              () => {
+                loading.dismiss();
+              }
+            );
           }
         }
       ]
