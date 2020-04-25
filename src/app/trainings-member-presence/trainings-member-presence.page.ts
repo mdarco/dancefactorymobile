@@ -159,6 +159,32 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
     await actionSheet.present();
   }
 
+  async openTrainingActionSheet() {
+    const button_note = {
+      text: 'Komentar',
+        handler: async () => {
+          await this.editTrainingNote();
+        }
+    };
+
+    const button_close = {
+      text: 'Zatvori',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {}
+    };
+
+    const buttons = [];
+    buttons.push(button_close);
+    buttons.push(button_note);
+
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Trening',
+      buttons
+    });
+    await actionSheet.present();
+  }
+
   async editNote(member) {
     const prompt = await this.alertController.create({
       header: 'Komentar',
@@ -229,6 +255,83 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
                 loading.dismiss();
               }
             );
+          }
+        }
+      ]
+    });
+
+    await prompt.present();
+  }
+
+  async editTrainingNote() {
+    const prompt = await this.alertController.create({
+      header: 'Komentar',
+      inputs: [
+        {
+          name: 'note',
+          type: 'text'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Odustani',
+          role: 'cancel',
+          handler: () => {}
+        },
+        {
+          text: 'Obriši',
+          handler: async () => {
+            // const loading = await this.loadingController.create({
+            //   spinner: 'circles',
+            //   message: 'Molim Vas, sačekajte...'
+            // });
+        
+            // await loading.present();
+  
+            // this.trainingsService.updateMemberPresence(
+            //   this.trainingId,
+            //   member.MemberID,
+            //   { ForceDeleteAbsenceNote: true }
+            // ).subscribe(
+            //   () => {
+            //     member.AbsenceNote = null;
+            //   },
+            //   error => {
+            //     this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
+            //     loading.dismiss();
+            //   },
+            //   () => {
+            //     loading.dismiss();
+            //   }
+            // );
+          }
+        },
+        {
+          text: 'Ok',
+          handler: async (propmptTextObj) => {
+            // const loading = await this.loadingController.create({
+            //   spinner: 'circles',
+            //   message: 'Molim Vas, sačekajte...'
+            // });
+        
+            // await loading.present();
+  
+            // this.trainingsService.updateMemberPresence(
+            //   this.trainingId,
+            //   member.MemberID,
+            //   { AbsenceNote: propmptTextObj.note }
+            // ).subscribe(
+            //   () => {
+            //     member.AbsenceNote = propmptTextObj.note;
+            //   },
+            //   error => {
+            //     this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
+            //     loading.dismiss();
+            //   },
+            //   () => {
+            //     loading.dismiss();
+            //   }
+            // );
           }
         }
       ]
