@@ -129,12 +129,12 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
         }
     };
 
-    // const button_comment = {
-    //   text: 'Komentar',
-    //     handler: () => {
-    //       // TODO:
-    //     }
-    // };
+    const button_note = {
+      text: 'Komentar',
+        handler: async () => {
+          await this.editNote(member);
+        }
+    };
 
     const button_close = {
       text: 'Zatvori',
@@ -149,7 +149,7 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
 
     if (!member.IsPresent) {
       buttons.push(button_absenceJustified);
-      // buttons.push(button_comment);
+      buttons.push(button_note);
     }
 
     const actionSheet = await this.actionSheetController.create({
@@ -157,6 +157,84 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
       buttons
     });
     await actionSheet.present();
+  }
+
+  async editNote(member) {
+    const prompt = await this.alertController.create({
+      header: 'Komentar',
+      inputs: [
+        {
+          name: 'note',
+          type: 'text',
+          value: member.AbsenceNote
+        }
+      ],
+      buttons: [
+        {
+          text: 'Odustani',
+          role: 'cancel',
+          handler: () => {}
+        },
+        {
+          text: 'Obriši',
+          handler: async () => {
+            const loading = await this.loadingController.create({
+              spinner: 'circles',
+              message: 'Molim Vas, sačekajte...'
+            });
+        
+            await loading.present();
+  
+            this.trainingsService.updateMemberPresence(
+              this.trainingId,
+              member.MemberID,
+              { ForceDeleteAbsenceNote: true }
+            ).subscribe(
+              () => {
+                member.AbsenceNote = null;
+              },
+              error => {
+                this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
+                loading.dismiss();
+              },
+              () => {
+                loading.dismiss();
+              }
+            );
+          }
+        },
+        {
+          text: 'Ok',
+          handler: async (propmptTextObj) => {
+            const loading = await this.loadingController.create({
+              spinner: 'circles',
+              message: 'Molim Vas, sačekajte...'
+            });
+        
+            await loading.present();
+  
+            this.trainingsService.updateMemberPresence(
+              this.trainingId,
+              member.MemberID,
+              { AbsenceNote: propmptTextObj.note }
+            ).subscribe(
+              () => {
+                member.AbsenceNote = propmptTextObj.note;
+              },
+              error => {
+                this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
+                loading.dismiss();
+              },
+              () => {
+                loading.dismiss();
+              }
+            );
+          }
+        }
+      ]
+    });
+
+    await prompt.present();
   }
 
   async toggleMemberPresenceStatus(member) {
