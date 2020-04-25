@@ -68,7 +68,9 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
     );
   }
 
-  async openActionSheet(member) {
+  async openActionSheet(event, member) {
+    event.stopPropagation(); // prevents calling 'toggleMemberPresenceStatus()' when open action sheet button is tapped
+
     const button_changeMemberStatus = {
       text: 'Izmeni status (prisutan/nije prisutan)',
         handler: async () => {
@@ -155,6 +157,49 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
       buttons
     });
     await actionSheet.present();
+  }
+
+  async toggleMemberPresenceStatus(member) {
+    let changeObj: any = {};
+
+    if (member.IsPresent) {
+      changeObj.IsPresent = false;
+      changeObj.AbsenceJustified = true;
+    }
+
+    if (!member.IsPresent) {
+      if (member.AbsenceJustified) {
+        changeObj.AbsenceJustified = false;
+      } else {
+        changeObj.IsPresent = true;
+        changeObj.AbsenceJustified = true;
+      }
+    }
+
+    const loading = await this.loadingController.create({
+      spinner: 'circles',
+      message: 'Molim Vas, sačekajte...'
+    });
+
+    await loading.present();
+
+    this.trainingsService.updateMemberPresence(
+      this.trainingId,
+      member.MemberID,
+      changeObj
+    ).subscribe(
+      () => {
+        member.IsPresent = changeObj.IsPresent;
+        member.AbsenceJustified = changeObj.AbsenceJustified;
+      },
+      error => {
+        this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
+        loading.dismiss();
+      },
+      () => {
+        loading.dismiss();
+      }
+    );
   }
 
   getStatusColor(member) {
