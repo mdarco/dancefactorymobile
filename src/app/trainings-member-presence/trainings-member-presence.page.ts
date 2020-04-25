@@ -84,7 +84,7 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
         // console.log('TRAINING MEMBERS', response);
         this.members = response;
         this.membersTotalCount = response.length;
-        this.membersPresentCount = this.members.filter(m => m.IsPresent).length;
+        this.updateMembersPresentCount();
       },
       error => {
         // console.log('TRAINING MEMBERS ERROR', error);
@@ -120,6 +120,7 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
           ).subscribe(
             () => {
               member.IsPresent = !member.IsPresent;
+              this.updateMembersPresentCount();
             },
             error => {
               this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
@@ -378,6 +379,7 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
       () => {
         member.IsPresent = changeObj.IsPresent;
         member.AbsenceJustified = changeObj.AbsenceJustified;
+        this.updateMembersPresentCount();
       },
       error => {
         this.showAlert('Došlo je do greške prilikom ažuriranja prozivnika.');
@@ -387,6 +389,10 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
         loading.dismiss();
       }
     );
+  }
+
+  updateMembersPresentCount() {
+    this.membersPresentCount = this.members.filter(m => m.IsPresent).length;
   }
 
   getStatusColor(member) {
