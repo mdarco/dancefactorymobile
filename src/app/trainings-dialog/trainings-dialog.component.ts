@@ -166,7 +166,7 @@ export class TrainingsDialogComponent implements OnInit, OnDestroy {
     this.trainingDanceGroupID = '';
   }
 
-  removeTrainingLocationSelection() {
+  removeTrainingScheduleSelection() {
     this.trainingScheduleID = '';
   }
 

@@ -13,12 +13,12 @@ export class TrainingsMemberPresencePage implements OnInit, OnDestroy {
   private trainingMembers$: any;
   private training$: any;
 
-  private members: any;
-  private membersTotalCount: number;
-  private membersPresentCount: number;
+  members: any;
+  membersTotalCount: number;
+  membersPresentCount: number;
 
   private trainingId: number;
-  private trainingNote: String = '';
+  trainingNote: String = '';
 
   constructor(
     private route: ActivatedRoute,
