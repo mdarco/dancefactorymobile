@@ -14,6 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from '../environments/environment';
 import { TrainingsDialogComponent } from './trainings-dialog/trainings-dialog.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 export function jwtOptionsFactory(storage) {
   return {
@@ -43,7 +44,8 @@ export function jwtOptionsFactory(storage) {
         useFactory: jwtOptionsFactory,
         deps: [Storage],
       }
-    })
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     StatusBar,
